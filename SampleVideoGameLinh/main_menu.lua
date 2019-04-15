@@ -121,8 +121,8 @@ function scene:create( event )
     creditsButton = widget.newButton( 
         {
             -- Set its position on the screen relative to the screen size
-            x = display.contentWidth*7/8,
-            y = display.contentHeight*7/8,
+            x = 120,
+            y = 500,
 
             -- Insert the images here
             defaultFile = "Images/Credits Button Unpressed.png",
@@ -138,7 +138,7 @@ function scene:create( event )
         {
             -- Set its position on the screen relative to the screen size
             x = 120,
-            y = 600,
+            y = 350,
 
             width = 200,
             height = 100,

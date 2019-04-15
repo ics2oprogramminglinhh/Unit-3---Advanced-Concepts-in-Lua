@@ -23,20 +23,20 @@ local scene = composer.newScene( sceneName )
 -----------------------------------------------------------------------------------------
  
 -- The local variables for this scene
-local beetleship
-local scrollXSpeed = 8
-local scrollYSpeed = -3
-local jungleSounds = audio.loadSound("Sounds/animals144.mp3")
-local jungleSoundsChannel
+local bee
+local scrollXSpeed = 5
+local scrollYSpeed = 3
+local buzzSound= audio.loadSound("Sounds/buzz.mp3")
+local buzzSoundChannel
 
 --------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 --------------------------------------------------------------------------------------------
 
--- The function that moves the beetleship across the screen
-local function moveBeetleship()
-    beetleship.x = beetleship.x + scrollXSpeed
-    beetleship.y = beetleship.y + scrollYSpeed
+-- The function that moves the bee across the screen
+local function movebee()
+    bee.x = bee.x + scrollXSpeed
+    bee.y = bee.y + scrollYSpeed
 end
 
 -- The function that will go to the main menu 
@@ -57,15 +57,15 @@ function scene:create( event )
     -- set the background to be black
     display.setDefault("background", 0, 0, 0)
 
-    -- Insert the beetleship image
-    beetleship = display.newImageRect("Images/beetleship.png", 200, 200)
+    -- Insert the bee image
+    bee = display.newImageRect("Images/bee.png", 200, 200)
 
-    -- set the initial x and y position of the beetleship
-    beetleship.x = 100
-    beetleship.y = display.contentHeight/2
+    -- set the initial x and y position of the bee
+    bee.x = 100
+    bee.y = display.contentHeight/2
 
     -- Insert objects into the scene group in order to ONLY be associated with this scene
-    sceneGroup:insert( beetleship )
+    sceneGroup:insert( bee )
 
 end -- function scene:create( event )
 
@@ -90,10 +90,10 @@ function scene:show( event )
 
     elseif ( phase == "did" ) then
         -- start the splash screen music
-        jungleSoundsChannel = audio.play(jungleSounds )
+        buzzSoundChannel = audio.play(buzzSound)
 
-        -- Call the moveBeetleship function as soon as we enter the frame.
-        Runtime:addEventListener("enterFrame", moveBeetleship)
+        -- Call the movebee function as soon as we enter the frame.
+        Runtime:addEventListener("enterFrame", movebee)
 
         -- Go to the main menu screen after the given time.
         timer.performWithDelay ( 3000, gotoMainMenu)          
@@ -124,7 +124,7 @@ function scene:hide( event )
     elseif ( phase == "did" ) then
         
         -- stop the jungle sounds channel for this screen
-        audio.stop(jungleSoundsChannel)
+        audio.stop(buzzSoundChannel)
     end
 
 end --function scene:hide( event )
