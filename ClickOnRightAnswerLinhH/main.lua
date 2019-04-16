@@ -1,8 +1,19 @@
 -----------------------------------------------------------------------------------------
--- Title: Click on Right Answer
--- Name: Linh Ho
--- Course: ICS2O
--- This program displays a question with 1 answer and 3 incorrect answers generated randomly
+-- main.lua
+-- Created by: Gil Robern
+-- Modified by: Your Name
+-- Date: Month Day, Year
+-- Description: This calls the splash screen of the app to load itself.
 -----------------------------------------------------------------------------------------
 
--- Your code here
+-- Hiding Status Bar
+display.setStatusBar( display.HiddenStatusBar )
+
+-----------------------------------------------------------------------------------------
+
+-- Use composer library
+local composer = require( "composer" )
+
+-----------------------------------------------------------------------------------------
+
+composer.gotoScene( "level1_screen" )
