@@ -34,7 +34,7 @@ local bkg
 local correctSound = audio.loadSound("Sounds/CorrectAnswer.mp3")
 local correctSoundChannel
 local youWin = loadSound("Sounds/youWinSound.wav")
-    local youWinChannel
+local youWinChannel
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
