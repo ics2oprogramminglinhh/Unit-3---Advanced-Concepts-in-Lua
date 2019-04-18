@@ -191,6 +191,7 @@ local function TouchListenerAnswer(touch)
         -- if the user gets the answer right, display Correct and call RestartSceneRight
         if (answer == tonumber(userAnswer)) then     
             correct.isVisible = true
+            correctAnswerChannel = audio.play(correctAnswer)
             -- increase the number correct by 1
             numberCorrect = numberCorrect + 1
             -- call RestartScene after 1 second
@@ -231,6 +232,7 @@ local function TouchListenerWrongAnswer2(touch)
 
             if (answer ~= tonumber(userAnswer)) then
                 incorrect.isVisible = true
+                wrongAnswerChannel = audio.play(wrongAnswer)
                 -- decrease a life
                 lives = lives - 1
                 -- call RestartScene after 1 second
@@ -250,6 +252,7 @@ local function TouchListenerWrongAnswer3(touch)
 
         if (answer ~= tonumber(userAnswer)) then
             incorrect.isVisible = true
+            wrongAnswerChannel = audio.play(wrongAnswer)
             -- decrease a life
             lives = lives - 1
             -- call RestartScene after 1 second
