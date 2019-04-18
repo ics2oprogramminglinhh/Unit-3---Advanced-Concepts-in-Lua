@@ -33,7 +33,7 @@ local scene = composer.newScene( sceneName )
 local bkg
 local correctSound = audio.loadSound("Sounds/CorrectAnswer.mp3")
 local correctSoundChannel
-local youWin = loadSound("Sounds/youWinSound.wav")
+local youWin = audio.loadSound("Sounds/youWinSound.wav")
 local youWinChannel
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -56,8 +56,9 @@ function scene:create( event )
     bkg.y = display.contentCenterY
     bkg.width = display.contentWidth
     bkg.height = display.contentHeight
+
     -- display the You win sound
-    local youWin = audio.play(youWin)
+    local youWinChannel = audio.play(youWin)
     -----------------------------------------------------------------------------------------     
 
     -- Associating display objects with this scene 

@@ -80,6 +80,12 @@ local level1Text
 -- Boolean variable that states if user clicked the answer or not
 local alreadyClickedAnswer = false
 
+-- sounds
+local correctAnswer = audio.loadSound("Sounds/CorrectAnswer.mp3")
+local correctAnswerChannel
+
+local wrongAnswer = audio.loadSound("Sounds/WrongBuzzer.mp3")
+local wrongAnswerChannel
 
 -----------------------------------------------------------------------------------------
 -- SOUND
@@ -234,7 +240,7 @@ local function TouchListenerWrongAnswer2(touch)
         end
 end
 
-local function TouchListenerWrongAnswer1(touch)
+local function TouchListenerWrongAnswer3(touch)
     -- get the user answer from the text object that was clicked on
     local userAnswer = wrongAnswer3TextObject.text
 

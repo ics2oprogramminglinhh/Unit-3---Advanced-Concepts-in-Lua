@@ -31,7 +31,8 @@ local scene = composer.newScene( sceneName )
 
 -- local variables for the scene
 local bkg
-
+local loseSound = audio.loadSound("Sounds/monsterSound.wav")
+local loseSoundChannel
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -53,6 +54,9 @@ function scene:create( event )
     bkg.y = display.contentCenterY
     bkg.width = display.contentWidth
     bkg.height = display.contentHeight
+
+    loseSoundChannel = audio.play(loseSound)
+
     -----------------------------------------------------------------------------------------     
 
     -- Associating display objects with this scene 
