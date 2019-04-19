@@ -1,10 +1,10 @@
 -----------------------------------------------------------------------------------------
 --
 -- splash_screen.lua
--- Created by: Your Name
--- Date: Month Day, Year
+-- Created by: Linh Ho
+-- Date: April 16th. 2019
 -- Description: This is the splash screen of the game. It displays the 
--- company logo that...
+-- company logo of Gax Games.
 -----------------------------------------------------------------------------------------
 
 -- Use Composer Library
@@ -12,36 +12,45 @@ local composer = require( "composer" )
 
 -- Name the Scene
 sceneName = "splash_screen"
-
 -----------------------------------------------------------------------------------------
-
 -- Create Scene Object
 local scene = composer.newScene( sceneName )
-
+-----------------------------------------------------------------------------------------
+-- GLOBAL VARIABLES
+-----------------------------------------------------------------------------------------
+-- Global variables
+scrollSpeed = 3
+runSpeed = 4
 ----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
  
--- The local variables for this scene
-local bee
-local scrollXSpeed = 5
-local scrollYSpeed = 3
-local buzzSound= audio.loadSound("Sounds/buzz.mp3")
-local buzzSoundChannel
+    local topLeft = display.newImageRect("Images/topleft.png", 200, 200)
+    local topRight = display.newImageRect("Images/topright.png", 200, 200)
+    local botLeft = display.newImageRect("Images/botleft.png", 200, 200)
+    local botRight = display.newImageRect("Images/botright.png", 200, 200)
 
+---------------------------------------------------------------------------------------
+-- SOUNDS
+---------------------------------------------------------------------------------------
+local whooshSound = audio.loadSound("Sounds/whooshS.mp3")
+local whooshChannel
+local bkg = audio.loadSound("Sounds/background.mp3")
+local bkgChannel
 --------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 --------------------------------------------------------------------------------------------
 
--- The function that moves the bee across the screen
-local function movebee()
-    bee.x = bee.x + scrollXSpeed
-    bee.y = bee.y + scrollYSpeed
-end
-
 -- The function that will go to the main menu 
 local function gotoMainMenu()
     composer.gotoScene( "main_menu" )
+end
+
+local function HideLogo()
+    topLeft.isVisible = false
+    topRight.isVisible = false
+    botLeft.isVisible = false
+    botRight.isVisible = false
 end
 
 -----------------------------------------------------------------------------------------
@@ -55,17 +64,13 @@ function scene:create( event )
     local sceneGroup = self.view
 
     -- set the background to be black
-    display.setDefault("background", 0, 0, 0)
-
-    -- Insert the bee image
-    bee = display.newImageRect("Images/bee.png", 200, 200)
-
-    -- set the initial x and y position of the bee
-    bee.x = 100
-    bee.y = display.contentHeight/2
+    display.setDefault("background", 202/255, 204/255, 206/255)
 
     -- Insert objects into the scene group in order to ONLY be associated with this scene
-    sceneGroup:insert( bee )
+    sceneGroup:insert( topLeft )
+    sceneGroup:insert( topRight )
+    sceneGroup:insert( botLeft )
+    sceneGroup:insert( botRight )
 
 end -- function scene:create( event )
 
@@ -90,13 +95,43 @@ function scene:show( event )
 
     elseif ( phase == "did" ) then
         -- start the splash screen music
-        buzzSoundChannel = audio.play(buzzSound)
+        bkg = audio.play(bkg)
+        -- lower the volume of the background music
+        audio.setVolume(0.5)
+        -- whoosh sound
+        whoosh = audio.play(whooshSound)
 
-        -- Call the movebee function as soon as we enter the frame.
-        Runtime:addEventListener("enterFrame", movebee)
+    -- set the initial x and y position of topLeft
+    topLeft.x = 400
+    topLeft.y = -1000
+
+    -- Transitions the topLeft image to the center
+    transition.to(topLeft, {x=400, y=300, time=1000})
+
+    -- set the initial x and y position of topRight
+    topRight.x = 1000
+    topRight.y = -1000
+
+    -- Transitions the topRight image to the center
+    transition.to(topRight, {x=600, y=300, time=1000})
+
+    -- set the initial x and y position of botLeft
+    botLeft.x = 400
+    botLeft.y = 1000
+
+    -- Transitions the botLeft image to the center
+    transition.to(botLeft, {x=400, y=500, time=1000})
+
+    -- set the initial x and y position of botRight
+    botRight.x = 1000
+    botRight.y = 1000
+
+    -- Transitions the botRight image to the center
+    transition.to(botRight, {x=600, y=500, time=1000})
 
         -- Go to the main menu screen after the given time.
-        timer.performWithDelay ( 3000, gotoMainMenu)          
+        timer.performWithDelay (2000, gotoMainMenu)  
+        timer.performWithDelay (2000, HideLogo)        
         
     end
 
@@ -124,7 +159,7 @@ function scene:hide( event )
     elseif ( phase == "did" ) then
         
         -- stop the jungle sounds channel for this screen
-        audio.stop(buzzSoundChannel)
+        audio.stop(bkgChannel)
     end
 
 end --function scene:hide( event )
