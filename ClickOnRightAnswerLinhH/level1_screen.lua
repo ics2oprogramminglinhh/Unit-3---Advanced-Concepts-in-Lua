@@ -11,7 +11,6 @@
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
 
-
 -- Use Composer Library
 local composer = require( "composer" )
 
@@ -80,17 +79,14 @@ local level1Text
 -- Boolean variable that states if user clicked the answer or not
 local alreadyClickedAnswer = false
 
--- sounds
+-----------------------------------------------------------------------------------------
+-- SOUNDS
+-----------------------------------------------------------------------------------------
 local correctAnswer = audio.loadSound("Sounds/CorrectAnswer.mp3")
 local correctAnswerChannel
 
 local wrongAnswer = audio.loadSound("Sounds/WrongBuzzer.mp3")
 local wrongAnswerChannel
-
------------------------------------------------------------------------------------------
--- SOUND
------------------------------------------------------------------------------------------
-
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -154,8 +150,6 @@ local function DisplayAddEquation()
 
     -- displays text on text object
     addEquationTextObject.text = addEquationString
-
-    
 end
 
 
@@ -167,6 +161,15 @@ local function RestartScene()
 
     livesText.text = "Number of lives = " .. tostring(lives)
     numberCorrectText.text = "Number correct = " .. tostring(numberCorrect)
+
+    -- if they have 3 points, go to the You Win Screen
+    if (numberCorrect == 3) then
+        composer.gotoScene("you_win")
+    else
+        DisplayAddEquation()
+        DetermineAnswers()
+        DisplayAnswers()
+    end
 
     -- if they have 0 lives, go to the You Lose screen
     if (lives == 0) then
