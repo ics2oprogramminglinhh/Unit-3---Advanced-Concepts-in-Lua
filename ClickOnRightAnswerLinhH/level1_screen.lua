@@ -285,15 +285,8 @@ local function RemoveTextObjectListeners()
 end
 
 -----------------------------------------------------------------------------------------
--- GLOBAL FUNCTIONS
------------------------------------------------------------------------------------------
-
-
------------------------------------------------------------------------------------------
 -- GLOBAL SCENE FUNCTIONS
 -----------------------------------------------------------------------------------------
-
-
 -- The function called when the screen doesn't exist
 function scene:create( event )
 
@@ -366,7 +359,7 @@ function scene:create( event )
 end
 
 -----------------------------------------------------------------------------------------
-
+-- FUNCTIONS
 -----------------------------------------------------------------------------------------
 
 -- The function called when the scene is issued to appear on screen
@@ -375,15 +368,12 @@ function scene:show( event )
     -- Creating a group that associates objects with the scene
     --local sceneGroup = self.view
     local phase = event.phase
-
-
     -----------------------------------------------------------------------------------------
 
     if ( phase == "will" ) then
 
         -- Called when the scene is still off screen (but is about to come on screen).
     -----------------------------------------------------------------------------------------
-
     elseif ( phase == "did" ) then
 
         -- initialize the number of lives and number correct 
@@ -398,7 +388,6 @@ function scene:show( event )
     end
 
 end
-
 -----------------------------------------------------------------------------------------
 
 -- The function called when the scene is issued to leave the screen
@@ -407,50 +396,35 @@ function scene:hide( event )
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
     local phase = event.phase
-
     -----------------------------------------------------------------------------------------
-
     if ( phase == "will" ) then
-
-
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
-        
         -- remove the listeners when leaving the scene
         RemoveTextObjectListeners()
-
     -----------------------------------------------------------------------------------------
-
     elseif ( phase == "did" ) then
     end
-
 end
-
 -----------------------------------------------------------------------------------------
-
 -- The function called when the scene is issued to be destroyed
 function scene:destroy( event )
 
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
-
     -----------------------------------------------------------------------------------------
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.
     -- Example: remove display objects, save state, etc.
 end
-
 -----------------------------------------------------------------------------------------
 -- EVENT LISTENERS
 -----------------------------------------------------------------------------------------
-
 -- Adding Event Listeners for Scene
 scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
-
 -----------------------------------------------------------------------------------------
-
 return scene
