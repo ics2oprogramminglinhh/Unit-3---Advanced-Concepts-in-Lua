@@ -115,7 +115,7 @@ local function DetermineAlternateAnswers()
     alternateAnswerBox2.text = alternateAnswer2
 
     -- generate incorrect answer and set it in the textbox
-    alternateAnswer3 = correctAnswer + math.random(1,2)
+    alternateAnswer3 = correctAnswer + math.random(1, 2)
     alternateAnswerBox3.text = alternateAnswer3
 -------------------------------------------------------------------------------------------
 -- RESET ALL X POSITIONS OF ANSWER BOXES (because the x-position is changed when it is
@@ -125,8 +125,6 @@ local function DetermineAlternateAnswers()
     alternateAnswerBox1.x = display.contentWidth * 0.9
     alternateAnswerBox2.x = display.contentWidth * 0.9
     alternateAnswerBox3.x = display.contentWidth * 0.9
-
-
 end
 
 local function PositionAnswers()
@@ -148,10 +146,13 @@ local function PositionAnswers()
         --alternateAnswerBox1
         alternateAnswerBox1.y = display.contentHeight * 0.55
 
+        -- alternateAnswerBox3
+        alternateAnswerBox3.y = display.contentHeight * 0.2
         ---------------------------------------------------------
         --remembering their positions to return the answer in case it's wrong
         alternateAnswerBox1PreviousY = alternateAnswerBox1.y
         alternateAnswerBox2PreviousY = alternateAnswerBox2.y
+        alternateAnswerBox3PreviousY = alternateAnswerBox3.y
         answerboxPreviousY = answerbox.y 
 
     -- random position 2
@@ -165,9 +166,13 @@ local function PositionAnswers()
         --alternateAnswerBox1
         alternateAnswerBox1.y = display.contentHeight * 0.7
 
+        --alternateAnswerBox2
+        alternateAnswerBox3.y = display.contentHeight * 0.8
+        
         --remembering their positions to return the answer in case it's wrong
         alternateAnswerBox1PreviousY = alternateAnswerBox1.y
         alternateAnswerBox2PreviousY = alternateAnswerBox2.y
+        alternateAnswerBox3PreviousY = alternateAnswerBox3.y
         answerboxPreviousY = answerbox.y 
 
     -- random position 3
@@ -180,9 +185,13 @@ local function PositionAnswers()
         --alternateAnswerBox1
         alternateAnswerBox1.y = display.contentHeight * 0.4
 
+         --alternateAnswerBox3
+        alternateAnswerBox3.y = display.contentHeight * 0.8
+
         --remembering their positions to return the answer in case it's wrong
         alternateAnswerBox1PreviousY = alternateAnswerBox1.y
         alternateAnswerBox2PreviousY = alternateAnswerBox2.y
+        alternateAnswerBox3PreviousY = alternateAnswerBox3.y
         answerboxPreviousY = answerbox.y 
     end
 end
