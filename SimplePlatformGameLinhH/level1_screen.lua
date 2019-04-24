@@ -1,8 +1,7 @@
 -----------------------------------------------------------------------------------------
---
 -- level1_screen.lua
--- Created by: Ms Raffin
--- Date: Nov. 22nd, 2014
+-- Created by: Linh Ho
+-- Date: April 24th, 2019
 -- Description: This is the level 1 screen of the game.
 -----------------------------------------------------------------------------------------
 
@@ -68,6 +67,7 @@ local GRAVITY = 6
 
 local leftW 
 local topW
+local rightW
 local floor
 
 local ball1
@@ -84,7 +84,7 @@ local questionsAnswered = 0
 -- When right arrow is touched, move character right
 local function right (touch)
     motionx = SPEED
-    character.xScale = 3
+    character.xScale = 1
 end
 
 -- When left arrow is touched, move character left
@@ -149,7 +149,7 @@ local function ReplaceCharacter()
     motionx = 0
 
     -- add physics body
-    physics.addBody( character, "dynamic", { density=0, friction=0.6, bounce=0, rotation=0 } )
+    physics.addBody( character, "dynamic", { density=0, friction=0.4, bounce=0, rotation=0 } )
 
     -- prevent character from being able to tip over
     character.isFixedRotation = true
@@ -250,6 +250,7 @@ local function onCollision( self, event )
             --check to see if the user has answered 5 questions
             if (questionsAnswered == 3) then
                 -- after getting 3 questions right, go to the you win screen
+                composer.gotoScene("you_win")
             end
         end        
 
@@ -309,6 +310,7 @@ local function AddPhysicsBodies()
     physics.addBody(leftW, "static", {density=1, friction=0.3, bounce=0.2} )
     physics.addBody(topW, "static", {density=1, friction=0.3, bounce=0.2} )
     physics.addBody(floor, "static", {density=1, friction=0.3, bounce=0.2} )
+    physics.addBody(rightW, "static", {density=1, friction=0.3, bounce=0.2} )
 
     physics.addBody(ball1, "static",  {density=0, friction=0, bounce=0} )
     physics.addBody(ball2, "static",  {density=0, friction=0, bounce=0} )
@@ -549,6 +551,9 @@ function scene:create( event )
     ball3.x = 500
     ball3.y = 735
     ball3.myName = "ball3"
+
+     -- Insert objects into the scene group in order to ONLY be associated with this scene
+    sceneGroup:insert( ball3 )
 
 end --function scene:create( event )
 
