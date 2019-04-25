@@ -1,13 +1,11 @@
 -----------------------------------------------------------------------------------------
--- instructions_screen.lua
--- Created by: Linh Ho
+--
+-- credits_screen.lua
+-- Created by: Ms Raffin
 -- Special thanks to Wal Wal for helping in the design of this framework.
--- Date: February 19th, 2019
--- Description: This is the instructions page, displaying a back button to the main menu.
+-- Date: Nov. 24th, 2014
+-- Description: This is the credits page, displaying a back button.
 -----------------------------------------------------------------------------------------
-
--- hide the status bar
-display.setStatusBar(display.HiddenStatusBar)
 
 -----------------------------------------------------------------------------------------
 -- INITIALIZATIONS
@@ -28,21 +26,21 @@ scene = composer.newScene( sceneName ) -- This function doesn't accept a string,
 -----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
-local bkg_image
 local backButton
-
--- background music 
-local theme = audio.loadSound("Sounds/theme.mp3")
-local themeChannel
+local bkg
+local transitionButton
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 
+--Creating transition to clicked screen.
+local function InstructionsDisplayedTransition( )
+    composer.gotoScene( "instructionsDisplayed_screen", {effect = "zoomInOut", time = 2000})
+end
 -- Creating Transitioning Function back to main menu
 local function BackTransition( )
-    composer.gotoScene( "main_menu", {effect = "slideLeft", time = 500})
+    composer.gotoScene( "main_menu", {effect = "zoomOutInFadeRotate", time = 500})
 end
-
 
 -----------------------------------------------------------------------------------------
 -- GLOBAL SCENE FUNCTIONS
@@ -59,40 +57,56 @@ function scene:create( event )
     -----------------------------------------------------------------------------------------
 
     -- Insert the background image and set it to the center of the screen
-    bkg_image = display.newImageRect("Images/Instructions Screen.png", display.contentWidth, display.contentHeight)
-    bkg_image.x = display.contentCenterX
-    bkg_image.y = display.contentCenterY
-    bkg_image.width = display.contentWidth
-    bkg_image.height = display.contentHeight
-
-
-    -- Play background music
-    themeChannel = audio.play(theme)
-    
-    -- Associating display objects with this scene 
-    sceneGroup:insert( bkg_image )
-
-    -- Send the background image to the back layer so all other objects can be on top
-    bkg_image:toBack()
+    bkg = display.newImageRect( "Images/InstructionsCanvisSize.png", display.contentCenterX, display.contentCenterY)
+    bkg.x = display.contentCenterX
+    bkg.y = display.contentCenterY
+    bkg.width = display.contentWidth
+    bkg.height = display.contentHeight
 
     -----------------------------------------------------------------------------------------
     -- BUTTON WIDGETS
     -----------------------------------------------------------------------------------------
+     
+    -- Creating transition Button
+    transitionButton = widget.newButton( 
+    {
+        -- Setting Position
 
+        x = display.contentCenterX,
+        y = display.contentCenterY,
+
+        
+
+        -- Setting Dimensions
+         width = 1024,
+         height = 768,
+
+        -- Setting Visual Properties
+        defaultFile = "Images/InstructionsCanvisSize.png",
+        overFile = "Images/InstructionsClicked.png",
+
+        -- Setting Functional Properties
+        onRelease = InstructionsDisplayedTransition
+
+    } )
+    
+ ---------------------------------------------------------------------------------
     -- Creating Back Button
     backButton = widget.newButton( 
     {
-        -- Setting Position
-        x = 100,
-        y = 100,
+        --Setting Position
+        x = display.contentWidth*1/8,
+        y = display.contentHeight*15/16,
 
-        -- Setting Dimensions
-        -- width = 1000,
-        -- height = 106,
+         --Setting Dimensions
+         --width = 1000,
+         --height = 106,
 
         -- Setting Visual Properties
-        defaultFile = "Images/Back Button Unpressed.png",
-        overFile = "Images/Back Button Pressed.png",
+        defaultFile = "Images/BackButton.png",
+        overFile = "Images/BackButtonPressed.png",
+
+        --backButton:toFront()
 
         -- Setting Functional Properties
         onRelease = BackTransition
@@ -102,9 +116,12 @@ function scene:create( event )
     -----------------------------------------------------------------------------------------
 
     -- Associating Buttons with this scene
+    sceneGroup:insert( bkg )
+    sceneGroup:insert( transitionButton )
     sceneGroup:insert( backButton )
     
-end -- function scene:create( event )
+end --function scene:create( event )
+
 
 -----------------------------------------------------------------------------------------
 
@@ -157,7 +174,6 @@ function scene:hide( event )
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
     end
-
 end --function scene:hide( event )
 
 -----------------------------------------------------------------------------------------

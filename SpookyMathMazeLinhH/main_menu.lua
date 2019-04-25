@@ -1,8 +1,8 @@
 -----------------------------------------------------------------------------------------
 --
 -- main_menu.lua
--- Created by: Your Name
--- Date: Month Day, Year
+-- Created by: Ms Raffin
+-- Date: Nov. 22nd, 2014
 -- Description: This is the main menu, displaying the credits, instructions & play buttons.
 -----------------------------------------------------------------------------------------
 
@@ -32,14 +32,13 @@ local scene = composer.newScene( sceneName )
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
 
-local bkg_image
-local playButton
+local mainMenu
+local startButton
 local creditsButton
-local instructionsButton
+local instructions
 
--- background music 
-local theme = audio.loadSound("Sounds/theme.mp3")
-local themeChannel
+-- Lives
+userLives = 3
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -47,24 +46,21 @@ local themeChannel
 
 -- Creating Transition Function to Credits Page
 local function CreditsTransition( )       
-    composer.gotoScene( "credits_screen", {effect = "zoomInOut", time = 500})
+    composer.gotoScene( "credits_screen", {effect = "flipFadeOutIn", time = 500})
 end 
 
 -----------------------------------------------------------------------------------------
 
 -- Creating Transition to Level1 Screen
 local function Level1ScreenTransition( )
-    composer.gotoScene( "level1_screen", {effect = "zoomOutIn", time = 1000})
+    composer.gotoScene( "level1_screen", {effect = "zoomInOutFade", time = 1000})
 end    
 
 -----------------------------------------------------------------------------------------
-
--- Creating Transition to Instructions Page
- 
- local function InstructionsTransition( )
-    composer.gotoScene( "instructions_screen", {effect = "slideDown", time = 500})
-end   
-
+-- Creating transition function to instructions page.
+local function InstructionsTransition( )
+    composer.gotoScene( "instructions_screen", {effect = "flipFadeOutIn", time = 500})
+end    
 -----------------------------------------------------------------------------------------
 -- GLOBAL SCENE FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -79,37 +75,28 @@ function scene:create( event )
     -- BACKGROUND IMAGE & STATIC OBJECTS
     -----------------------------------------------------------------------------------------
 
-    -- Insert the background image and set it to the center of the screen
-    bkg_image = display.newImage("Images/main_menu.png")
-    bkg_image.x = display.contentCenterX
-    bkg_image.y = display.contentCenterY
-    bkg_image.width = display.contentWidth
-    bkg_image.height = display.contentHeight
-
-
-    -- Associating display objects with this scene 
-    sceneGroup:insert( bkg_image )
-
-    -- Send the background image to the back layer so all other objects can be on top
-    bkg_image:toBack()
+    -- Insert the main menu image and set it to the center of the screen
+    mainMenu = display.newImage("Images/TitlePage.png", 1024, 768)
+    mainMenu.x = display.contentCenterX
+    mainMenu.y = display.contentCenterY
+    mainMenu.width = display.contentWidth
+    mainMenu.height = display.contentHeight
 
     -----------------------------------------------------------------------------------------
     -- BUTTON WIDGETS
     -----------------------------------------------------------------------------------------   
 
     -- Creating Play Button
-    playButton = widget.newButton( 
+    startButton = widget.newButton( 
         {   
             -- Set its position on the screen relative to the screen size
-            x = 120,
-            y = 200,
-
-            width = 200,
-            height = 100,
+            x = display.contentWidth*2.15/5,
+            y = 420,
 
             -- Insert the images here
-            defaultFile = "Images/Start Button Unpressed.png",
-            overFile = "Images/Start Button Pressed.png",
+            defaultFile = "Images/StartButton.png",
+            overFile = "Images/StartButton Clicked.png",
+
 
             -- When the button is released, call the Level1 screen transition function
             onRelease = Level1ScreenTransition          
@@ -117,47 +104,44 @@ function scene:create( event )
 
     -----------------------------------------------------------------------------------------
 
-    -- Creating Credits Button
-    creditsButton = widget.newButton( 
-        {
-            -- Set its position on the screen relative to the screen size
-            x = 120,
-            y = 500,
-
-            -- Insert the images here
-            defaultFile = "Images/Credits Button Unpressed.png",
-            overFile = "Images/Credits Button Pressed.png",
-
-            -- When the button is released, call the Credits transition function
-            onRelease = CreditsTransition
-        } ) 
-    
-    -- Creating Instructions Button
-
+     -- Creating Instructions Button
     instructionsButton = widget.newButton( 
         {
             -- Set its position on the screen relative to the screen size
-            x = 120,
-            y = 350,
+            x = display.contentWidth*5.75/8,
+            y = 475,
 
-            width = 200,
-            height = 100,
-
-            -- Insert images here
-            defaultFile = "Images/Instructions Button Unpressed.png",
-            overFile = "Images/Instructions Button Pressed.png",
+            -- Insert the images here
+            defaultFile = "Images/InstructionButton.png",
+            overFile = "Images/InstructionButton Clicked.png",
 
             -- When the button is released, call the Instructions transition function
             onRelease = InstructionsTransition
         } ) 
+    ----------------------------------------------------------------------------------------
+    -- Creating Credits Button
+    creditsButton = widget.newButton( 
+        {
+            -- Set its position on the screen relative to the screen size
+            x = display.contentWidth*1/8,
+            y = 475,
+
+            -- Insert the images here
+            defaultFile = "Images/CreditsButton.png",
+            overFile = "Images/CreditsButton Clicked.png",
+
+            -- When the button is released, call the Credits transition function
+            onRelease = CreditsTransition
+        } ) 
+
     -----------------------------------------------------------------------------------------
 
     -- Associating button widgets with this scene
-    sceneGroup:insert( playButton )
+    sceneGroup:insert( mainMenu )
+    sceneGroup:insert( startButton )
     sceneGroup:insert( creditsButton )
-    
-    -- INSERT INSTRUCTIONS BUTTON INTO SCENE GROUP
     sceneGroup:insert( instructionsButton )
+    
 end -- function scene:create( event )   
 
 
@@ -182,10 +166,6 @@ function scene:show( event )
     -----------------------------------------------------------------------------------------
 
     -- Called when the scene is now on screen.
-    
-    -- Play the background music for this scene
-    themeChannel = audio.play(theme)
-
     -- Insert code here to make the scene come alive.
     -- Example: start timers, begin animation, play audio, etc.
     elseif ( phase == "did" ) then       

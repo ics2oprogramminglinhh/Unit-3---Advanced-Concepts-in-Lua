@@ -29,6 +29,9 @@ scene = composer.newScene( sceneName ) -- This function doesn't accept a string,
 local bkg_image
 local backButton
 
+-- background music 
+local theme = audio.loadSound("Sounds/theme.mp3")
+local themeChannel
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -66,6 +69,8 @@ function scene:create( event )
     -- Send the background image to the back layer so all other objects can be on top
     bkg_image:toBack()
 
+    -- Play background music in credits screen
+    themeChannel = audio.play(theme)
     -----------------------------------------------------------------------------------------
     -- BUTTON WIDGETS
     -----------------------------------------------------------------------------------------
