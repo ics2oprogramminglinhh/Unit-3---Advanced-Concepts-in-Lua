@@ -124,6 +124,9 @@ function scene:create( event )
             x = 120,
             y = 500,
 
+            width = 200,
+            height = 100,
+            
             -- Insert the images here
             defaultFile = "Images/Credits Button Unpressed.png",
             overFile = "Images/Credits Button Pressed.png",
