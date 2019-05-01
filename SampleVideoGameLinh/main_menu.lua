@@ -6,6 +6,8 @@
 -- Description: This is the main menu, displaying the credits, instructions & play buttons.
 -----------------------------------------------------------------------------------------
 
+-- hide the status bar
+display.setStatusBar(display.HiddenStatusBar)
 -----------------------------------------------------------------------------------------
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
@@ -102,7 +104,7 @@ function scene:create( event )
         {   
             -- Set its position on the screen relative to the screen size
             x = 120,
-            y = 200,
+            y = 460,
 
             width = 200,
             height = 100,
@@ -122,7 +124,7 @@ function scene:create( event )
         {
             -- Set its position on the screen relative to the screen size
             x = 120,
-            y = 500,
+            y = 700,
 
             width = 200,
             height = 100,
@@ -141,7 +143,7 @@ function scene:create( event )
         {
             -- Set its position on the screen relative to the screen size
             x = 120,
-            y = 350,
+            y = 580,
 
             width = 200,
             height = 100,

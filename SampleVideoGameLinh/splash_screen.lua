@@ -7,6 +7,9 @@
 -- company logo of Gax Games.
 -----------------------------------------------------------------------------------------
 
+-- hide the status bar
+display.setStatusBar(display.HiddenStatusBar)
+
 -- Use Composer Library
 local composer = require( "composer" )
 

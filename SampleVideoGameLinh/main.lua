@@ -6,8 +6,8 @@
 -- Description: This calls the splash screen of the app to load itself.
 -----------------------------------------------------------------------------------------
 
--- Hiding Status Bar
--- HIDE THE STATUS BAR
+-- hide the status bar
+display.setStatusBar(display.HiddenStatusBar)
 
 -----------------------------------------------------------------------------------------
 
