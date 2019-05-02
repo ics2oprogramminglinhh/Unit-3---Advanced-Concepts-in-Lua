@@ -12,6 +12,9 @@ display.setStatusBar(display.HiddenStatusBar)
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
 
+-- hide the status bar
+display.setStatusBar(display.HiddenStatusBar)
+
 -- Use Composer Library
 local composer = require( "composer" )
 
@@ -40,7 +43,7 @@ local creditsButton
 local instructionsButton
 
 -- background music 
-local theme = audio.loadSound("Sounds/theme.mp3")
+local theme = audio.loadSound("Sounds/bkgMusic.mp3")
 local themeChannel
 
 -----------------------------------------------------------------------------------------
@@ -104,6 +107,7 @@ function scene:create( event )
         {   
             -- Set its position on the screen relative to the screen size
             x = 120,
+
             y = 460,
 
             width = 200,
@@ -125,6 +129,7 @@ function scene:create( event )
             -- Set its position on the screen relative to the screen size
             x = 120,
             y = 700,
+
 
             width = 200,
             height = 100,
@@ -155,16 +160,33 @@ function scene:create( event )
             -- When the button is released, call the Instructions transition function
             onRelease = InstructionsTransition
         } ) 
+
+        -- Creating Mute Button
+
+    muteButton = widget.newButton( 
+        {
+            -- Set its position on the screen relative to the screen size
+            x = 900,
+            y = 700,
+
+            width = 100,
+            height = 100,
+
+            -- Insert images here
+            defaultFile = "Images/Mute Button Unpressed.png",
+            overFile = "Images/Mute Button Pressed.png",
+
+            -- When the button is released, call the Mute transition function
+            onRelease = MuteTransition
+        } ) 
     -----------------------------------------------------------------------------------------
 
     -- Associating button widgets with this scene
     sceneGroup:insert( playButton )
     sceneGroup:insert( creditsButton )
-    
-    -- INSERT INSTRUCTIONS BUTTON INTO SCENE GROUP
     sceneGroup:insert( instructionsButton )
+    sceneGroup:insert( muteButton )
 end -- function scene:create( event )   
-
 
 
 -----------------------------------------------------------------------------------------
@@ -190,7 +212,8 @@ function scene:show( event )
     
     -- Play the background music for this scene
     themeChannel = audio.play(theme)
-
+    -- lower the volume
+        audio.setVolume(0.5)
     -- Insert code here to make the scene come alive.
     -- Example: start timers, begin animation, play audio, etc.
     elseif ( phase == "did" ) then       

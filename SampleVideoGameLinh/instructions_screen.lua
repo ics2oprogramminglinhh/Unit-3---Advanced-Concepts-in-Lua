@@ -87,8 +87,8 @@ function scene:create( event )
         y = 100,
 
         -- Setting Dimensions
-        -- width = 1000,
-        -- height = 106,
+        width = 200,
+        height = 100,
 
         -- Setting Visual Properties
         defaultFile = "Images/Back Button Unpressed.png",
