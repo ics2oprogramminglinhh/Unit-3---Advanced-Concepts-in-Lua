@@ -43,7 +43,8 @@ local instructionsButton
 -- background music 
 local theme = audio.loadSound("Sounds/bkgMusic.mp3")
 local themeChannel
-
+-- lower the volume
+audio.setVolume(0.5)
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
