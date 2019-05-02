@@ -10,6 +10,9 @@
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
 
+-- hide the status bar
+display.setStatusBar(display.HiddenStatusBar)
+
 -- Use Composer Library
 local composer = require( "composer" )
 
@@ -38,7 +41,7 @@ local creditsButton
 local instructionsButton
 
 -- background music 
-local theme = audio.loadSound("Sounds/theme.mp3")
+local theme = audio.loadSound("Sounds/bkgMusic.mp3")
 local themeChannel
 
 -----------------------------------------------------------------------------------------
