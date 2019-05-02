@@ -30,15 +30,15 @@ local bkg_image
 local backButton
 
 -- background music 
-local theme = audio.loadSound("Sounds/theme.mp3")
-local themeChannel
+local creditScreen = audio.loadSound("Sounds/creditScreen.mp3")
+local creditScreenChannel
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 
 -- Creating Transitioning Function back to main menu
 local function BackTransition( )
-    composer.gotoScene( "main_menu", {effect = "zoomInOutFadeRotate", time = 500})
+    composer.gotoScene( "main_menu", {effect = "fade", time = 500})
 end
 
 
@@ -70,7 +70,10 @@ function scene:create( event )
     bkg_image:toBack()
 
     -- Play background music in credits screen
-    themeChannel = audio.play(theme)
+    creditScreenChannel = audio.play(creditScreen)
+
+    -- set volume in same channel, with infinite loop
+    audio.setVolume(0.5, { channel=1, loops=-1 } )
     -----------------------------------------------------------------------------------------
     -- BUTTON WIDGETS
     -----------------------------------------------------------------------------------------
@@ -147,7 +150,7 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
-
+        audio.stop(creditScreenChannel)
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then

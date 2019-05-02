@@ -6,8 +6,6 @@
 -- Description: This is the main menu, displaying the credits, instructions & play buttons.
 -----------------------------------------------------------------------------------------
 
--- hide the status bar
-display.setStatusBar(display.HiddenStatusBar)
 -----------------------------------------------------------------------------------------
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
@@ -43,23 +41,25 @@ local creditsButton
 local instructionsButton
 
 -- background music 
-local theme = audio.loadSound("Sounds/bkgMusic.mp3")
-local themeChannel
+local mainMenu = audio.loadSound("Sounds/bkgMusic.mp3")
+local mainMenuChannel
 
+local click = audio.loadSound("Sounds/clickSound.mp3")
+local clickChannel
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 
 -- Creating Transition Function to Credits Page
 local function CreditsTransition( )       
-    composer.gotoScene( "credits_screen", {effect = "zoomInOut", time = 500})
+    composer.gotoScene( "credits_screen", {effect = "slideRight", time = 500})
 end 
 
 -----------------------------------------------------------------------------------------
 
 -- Creating Transition to Level1 Screen
 local function Level1ScreenTransition( )
-    composer.gotoScene( "level1_screen", {effect = "zoomOutIn", time = 1000})
+    composer.gotoScene( "level1_screen", {effect = "zoomInOutFade", time = 500})
 end    
 
 -----------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ end
 -- Creating Transition to Instructions Page
  
  local function InstructionsTransition( )
-    composer.gotoScene( "instructions_screen", {effect = "slideDown", time = 500})
+    composer.gotoScene( "instructions_screen", {effect = "slideLeft", time = 500})
 end   
 
 -----------------------------------------------------------------------------------------
@@ -118,7 +118,8 @@ function scene:create( event )
             overFile = "Images/Start Button Pressed.png",
 
             -- When the button is released, call the Level1 screen transition function
-            onRelease = Level1ScreenTransition          
+            onRelease = Level1ScreenTransition
+                      
         } )
 
     -----------------------------------------------------------------------------------------
@@ -209,11 +210,10 @@ function scene:show( event )
     -----------------------------------------------------------------------------------------
 
     -- Called when the scene is now on screen.
-    
     -- Play the background music for this scene
-    themeChannel = audio.play(theme)
+        mainMenuChannel = audio.play(mainMenu)
     -- lower the volume
-        audio.setVolume(0.5)
+        audio.setVolume(0.5, { channel=1, loops=-1 } )
     -- Insert code here to make the scene come alive.
     -- Example: start timers, begin animation, play audio, etc.
     elseif ( phase == "did" ) then       
@@ -241,7 +241,8 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
-
+        --stop the mainMenu music
+        audio.stop(mainMenuChannel)
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then

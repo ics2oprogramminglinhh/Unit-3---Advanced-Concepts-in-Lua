@@ -98,11 +98,11 @@ function scene:show( event )
 
     elseif ( phase == "did" ) then
         -- start the splash screen music
-        bkg = audio.play(bkg)
+        bkgChannel = audio.play(bkg)
         -- lower the volume of the background music
         audio.setVolume(0.5)
         -- whoosh sound
-        whoosh = audio.play(whooshSound)
+        whooshChannel = audio.play(whooshSound)
 
     -- set the initial x and y position of topLeft
     topLeft.x = 400
@@ -133,8 +133,8 @@ function scene:show( event )
     transition.to(botRight, {x=600, y=500, time=500})
 
         -- Go to the main menu screen after the given time.
-        timer.performWithDelay (2000, gotoMainMenu)  
-        timer.performWithDelay (2000, HideLogo)        
+        timer.performWithDelay (3000, gotoMainMenu)  
+        timer.performWithDelay (3000, HideLogo)        
         
     end
 
@@ -151,19 +151,19 @@ function scene:hide( event )
 
     -----------------------------------------------------------------------------------------
 
+    if ( phase == "will" ) then    
     -- Called when the scene is on screen (but is about to go off screen).
     -- Insert code here to "pause" the scene.
     -- Example: stop timers, stop animation, stop audio, etc.
-    if ( phase == "will" ) then  
-
+    -- stop the sound channels for this screen
+        audio.stop(bkgChannel)
+        audio.stop(whooshChannel)
     -----------------------------------------------------------------------------------------
 
     -- Called immediately after scene goes off screen.
     elseif ( phase == "did" ) then
         
-        -- stop the jungle sounds channel for this screen
-        audio.stop(bkgChannel)
-        audio.stop(whooshChannel)
+        
     end
 
 end --function scene:hide( event )

@@ -33,7 +33,8 @@ local scene = composer.newScene( sceneName )
 
 -- The local variables for this scene
 local bkg_image
-
+local firstScreen = audio.loadSound("Sounds/level1Screen.mp3")
+local firstScreenChannel
 -----------------------------------------------------------------------------------------
 -- GLOBAL SCENE FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -82,7 +83,10 @@ function scene:show( event )
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
-
+        -- Play background music
+        firstScreenChannel = audio.play(firstScreen)
+        -- set volume, repeat in channel, and infinite loop
+        audio.setVolume(0.5, { channel=1, loops=-1 } )
     end
 
 end --function scene:show( event )
@@ -102,7 +106,8 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
-
+        -- STOP THE TIMER OF BACKGROUND MUSIC
+        audio.stop(firstScreenChannel)
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
