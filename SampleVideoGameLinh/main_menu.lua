@@ -43,8 +43,7 @@ local instructionsButton
 -- background music 
 local theme = audio.loadSound("Sounds/bkgMusic.mp3")
 local themeChannel
--- lower the volume
-audio.setVolume(0.5)
+
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -192,7 +191,8 @@ function scene:show( event )
     
     -- Play the background music for this scene
     themeChannel = audio.play(theme)
-
+    -- lower the volume
+        audio.setVolume(0.5)
     -- Insert code here to make the scene come alive.
     -- Example: start timers, begin animation, play audio, etc.
     elseif ( phase == "did" ) then       
