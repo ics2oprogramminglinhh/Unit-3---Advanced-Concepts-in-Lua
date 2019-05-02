@@ -36,7 +36,7 @@ runSpeed = 4
 ---------------------------------------------------------------------------------------
 -- SOUNDS
 ---------------------------------------------------------------------------------------
-local whooshSound = audio.loadSound("Sounds/whooshS.mp3")
+local whooshSound = audio.loadSound("Sounds/whoosh.mp3")
 local whooshChannel
 local bkg = audio.loadSound("Sounds/background.mp3")
 local bkgChannel
@@ -109,28 +109,28 @@ function scene:show( event )
     topLeft.y = -1000
 
     -- Transitions the topLeft image to the center
-    transition.to(topLeft, {x=400, y=300, time=1000})
+    transition.to(topLeft, {x=400, y=300, time=500})
 
     -- set the initial x and y position of topRight
     topRight.x = 1000
     topRight.y = -1000
 
     -- Transitions the topRight image to the center
-    transition.to(topRight, {x=600, y=300, time=1000})
+    transition.to(topRight, {x=600, y=300, time=500})
 
     -- set the initial x and y position of botLeft
     botLeft.x = 400
     botLeft.y = 1000
 
     -- Transitions the botLeft image to the center
-    transition.to(botLeft, {x=400, y=500, time=1000})
+    transition.to(botLeft, {x=400, y=500, time=500})
 
     -- set the initial x and y position of botRight
     botRight.x = 1000
     botRight.y = 1000
 
     -- Transitions the botRight image to the center
-    transition.to(botRight, {x=600, y=500, time=1000})
+    transition.to(botRight, {x=600, y=500, time=500})
 
         -- Go to the main menu screen after the given time.
         timer.performWithDelay (2000, gotoMainMenu)  
@@ -163,6 +163,7 @@ function scene:hide( event )
         
         -- stop the jungle sounds channel for this screen
         audio.stop(bkgChannel)
+        audio.stop(whooshChannel)
     end
 
 end --function scene:hide( event )

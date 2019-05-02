@@ -156,16 +156,33 @@ function scene:create( event )
             -- When the button is released, call the Instructions transition function
             onRelease = InstructionsTransition
         } ) 
+
+        -- Creating Mute Button
+
+    muteButton = widget.newButton( 
+        {
+            -- Set its position on the screen relative to the screen size
+            x = 900,
+            y = 700,
+
+            width = 100,
+            height = 100,
+
+            -- Insert images here
+            defaultFile = "Images/Mute Button Unpressed.png",
+            overFile = "Images/Mute Button Pressed.png",
+
+            -- When the button is released, call the Mute transition function
+            onRelease = MuteTransition
+        } ) 
     -----------------------------------------------------------------------------------------
 
     -- Associating button widgets with this scene
     sceneGroup:insert( playButton )
     sceneGroup:insert( creditsButton )
-    
-    -- INSERT INSTRUCTIONS BUTTON INTO SCENE GROUP
     sceneGroup:insert( instructionsButton )
+    sceneGroup:insert( muteButton )
 end -- function scene:create( event )   
-
 
 
 -----------------------------------------------------------------------------------------
