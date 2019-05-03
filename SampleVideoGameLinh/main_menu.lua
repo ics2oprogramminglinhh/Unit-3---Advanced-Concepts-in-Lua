@@ -177,7 +177,6 @@ function scene:create( event )
             x = 120,
             y = 700,
 
-
             width = 200,
             height = 100,
             
