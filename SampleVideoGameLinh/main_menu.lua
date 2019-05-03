@@ -40,19 +40,27 @@ local playButton
 local creditsButton
 local instructionsButton
 
+local muteButton
+local unmuteButton
+------------------------------------------------------------------------------------------
+-- SOUNDS
+------------------------------------------------------------------------------------------
+
 -- background music 
 local mainMenu = audio.loadSound("Sounds/bkgMusic.mp3")
 local mainMenuChannel
 
+
 local click = audio.loadSound("Sounds/clickSound.mp3")
 local clickChannel
 
-local muteButton
-local unmuteButton
 -----------------------------------------------------------------------------------------
 -- GLOBAL VARIABLES
 -----------------------------------------------------------------------------------------
+
+-- set the boolean variable to be true
 soundOn = true
+
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -242,6 +250,9 @@ function scene:show( event )
     elseif ( phase == "did" ) then       
         -- Play the background music for this scene
         mainMenuChannel = audio.play(mainMenu)
+        -- display the mute button at the start, so it doesn't overlap when it's muted
+        muteButton.isVisible = true
+        unmuteButton.isVisible = false
         -- lower the volume
         audio.setVolume(0.5, { channel=1, loops=-1 } )
         -- mute button

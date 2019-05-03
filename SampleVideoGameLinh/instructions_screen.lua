@@ -79,7 +79,7 @@ function scene:create( event )
     {
         -- Setting Position
         x = 100,
-        y = 100,
+        y = 700,
 
         -- Setting Dimensions
         width = 200,
