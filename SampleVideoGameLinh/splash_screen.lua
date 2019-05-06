@@ -22,7 +22,7 @@ local scene = composer.newScene( sceneName )
 -- GLOBAL VARIABLES
 -----------------------------------------------------------------------------------------
 -- Global variables
-scrollSpeed = 3
+scrollSpeed = 4
 runSpeed = 4
 ----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
