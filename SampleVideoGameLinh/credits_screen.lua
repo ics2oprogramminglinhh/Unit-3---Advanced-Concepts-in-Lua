@@ -32,6 +32,13 @@ local backButton
 -- background music 
 local creditScreen = audio.loadSound("Sounds/creditScreen.mp3")
 local creditScreenChannel
+
+local muteButton
+local unmuteButton
+-----------------------------------------------------------------------------------------
+-- GLOBAL VARIABLES
+-----------------------------------------------------------------------------------------
+soundOn = true
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -40,6 +47,7 @@ local creditScreenChannel
 local function BackTransition( )
     composer.gotoScene( "main_menu", {effect = "fade", time = 500})
 end
+
 
 
 -----------------------------------------------------------------------------------------
