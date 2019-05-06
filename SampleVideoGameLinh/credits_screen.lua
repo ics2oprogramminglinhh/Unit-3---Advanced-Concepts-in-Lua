@@ -33,22 +33,14 @@ local backButton
 local creditScreen = audio.loadSound("Sounds/creditScreen.mp3")
 local creditScreenChannel
 
-local muteButton
-local unmuteButton
------------------------------------------------------------------------------------------
--- GLOBAL VARIABLES
------------------------------------------------------------------------------------------
-soundOn = true
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 
 -- Creating Transitioning Function back to main menu
 local function BackTransition( )
-    composer.gotoScene( "main_menu", {effect = "fade", time = 500})
+    composer.gotoScene( "main_menu", {effect = "slideLeft", time = 500})
 end
-
-
 
 -----------------------------------------------------------------------------------------
 -- GLOBAL SCENE FUNCTIONS
@@ -77,11 +69,6 @@ function scene:create( event )
     -- Send the background image to the back layer so all other objects can be on top
     bkg_image:toBack()
 
-    -- Play background music in credits screen
-    creditScreenChannel = audio.play(creditScreen)
-
-    -- set volume in same channel, with infinite loop
-    audio.setVolume(0.5, { channel=1, loops=-1 } )
     -----------------------------------------------------------------------------------------
     -- BUTTON WIDGETS
     -----------------------------------------------------------------------------------------
@@ -136,9 +123,14 @@ function scene:show( event )
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
+        -- Play the background music for this scene
+        creditScreenChannel = audio.play(creditScreen)
+        -- lower the volume
+        audio.setVolume(0.5, { channel=1, loops=-1 } )
     end
+end
 
-end -- function scene:show( event )
+ -- function scene:show( event )
 
 -----------------------------------------------------------------------------------------
 
