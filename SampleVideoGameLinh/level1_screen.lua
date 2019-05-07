@@ -1,8 +1,8 @@
 -----------------------------------------------------------------------------------------
 --
 -- level1_screen.lua
--- Created by: Your Name
--- Date: Month Day, Year
+-- Created by: Linh Ho
+-- Date: May 6th, 2019
 -- Description: This is the level 1 screen of the game.
 -----------------------------------------------------------------------------------------
 
