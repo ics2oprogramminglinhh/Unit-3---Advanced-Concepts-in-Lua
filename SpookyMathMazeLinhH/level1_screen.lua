@@ -187,6 +187,7 @@ local function Movement( touch )
 
         -- Setting a boolean to false to simulate the release of a held button
         joystickPressed = false
+
     end
 end --local function Movement( touch )
 -----------------------------------------------------------------------------------------
@@ -303,8 +304,6 @@ function scene:create( event )
     wall9:setFillColor(0, 0, 0)
     wall9:toFront()
     
-    --Creating the pumpkins.
-
     -- Creating Joystick
     analogStick = joystick.new( 50, 75 ) 
 
@@ -315,7 +314,7 @@ function scene:create( event )
     -- Changing transparency
     analogStick.alpha = 0.5
 
-
+    --Creating the pumpkins
    pumpkin1 = display.newImageRect("Images/LevelPumpkin.png", 178, 148)
    pumpkin1.anchorX = 0
    pumpkin1.anchorY = 0
