@@ -102,7 +102,7 @@ local function ScreenLimit( character )
     end
 end
  
-local function RuntimeEvents( )
+local function RuntimeEvents()
 
         -- Retrieving the properties of the joystick
         angle = analogStick:getAngle()

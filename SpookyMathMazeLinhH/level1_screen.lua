@@ -380,11 +380,8 @@ function scene:create( event )
     sun.collision = onLocalCollisionWithSun
     sun:addEventListener( "collision", sun )  
 
-    
-    -- Send the background image to the back layer so all other objects can be on top
-    
-
-        -- Insert background image into the scene group in order to ONLY be associated with this scene
+-- Insert background image into the scene group in order 
+-- to ONLY be associated with this scene
     sceneGroup:insert( bkg_image )
     sceneGroup:insert( analogStick )   
     sceneGroup:insert( pumpkin1 ) 
