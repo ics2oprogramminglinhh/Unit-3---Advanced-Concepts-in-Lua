@@ -191,8 +191,6 @@ local function Movement( touch )
 end --local function Movement( touch )
 -----------------------------------------------------------------------------------------
 
-
-
 local function onLocalCollision( self, event )
 
     if ( event.phase == "began" ) then
@@ -305,8 +303,6 @@ function scene:create( event )
     wall9:setFillColor(0, 0, 0)
     wall9:toFront()
     
-
-
     --Creating the pumpkins.
 
     -- Creating Joystick
@@ -459,7 +455,6 @@ function scene:show( event )
             pumpkin1.y = -250
             pumpkin1.collision = offLocalCollision
             pumpkin1:removeEventListener( "collision", pumpkin1 )
-
         end
 
         if (pumpkinNumber == 2) then
@@ -468,7 +463,6 @@ function scene:show( event )
             pumpkin2.y = -250
             pumpkin2.collision = offLocalCollision
             pumpkin2:removeEventListener( "collision", pumpkin2 )
-
         end
 
         if (pumpkinNumber == 3) then
@@ -477,7 +471,6 @@ function scene:show( event )
             pumpkin3.y = -250
             pumpkin3.collision = offLocalCollision
             pumpkin3:removeEventListener( "collision", pumpkin3 )
-
         end
 
         if (pumpkinNumber == 4) then
@@ -486,10 +479,8 @@ function scene:show( event )
             pumpkin4.y = -250
             pumpkin4.collision = offLocalCollision
             pumpkin4:removeEventListener( "collision", pumpkin4 )
-
         end
-
-               
+     
         -- start the physics engine
         physics.start()
         physics.setGravity( 0, 0 )
@@ -501,13 +492,9 @@ function scene:show( event )
         -----------------------------------------------------------------------------------------
         -- EVENT LISTENERS
         -----------------------------------------------------------------------------------------
-
         -- Listening for the usage of the joystick
         analogStick:addEventListener( "touch", Movement )
         Runtime:addEventListener("enterFrame", RuntimeEvents)
-
-
-
     end
 
 end  --function scene:show( event )
@@ -534,7 +521,7 @@ function scene:hide( event )
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
 
-                -- Deactivating the Analog Stick
+        -- Deactivating the Analog Stick
         analogStick:deactivate()
 
         -- Stopping the Runtime Events
@@ -543,7 +530,7 @@ function scene:hide( event )
         -- Removing the listener which listens for the usage of the joystick
         analogStick:removeEventListener( "touch", Movement )
 
-        flower:removeEventListener( "collision", flower)
+        flower:removeEventListener( "collision", flower )
         pumpkin1:removeEventListener( "collision", pumpkin1 )
         RemovePhysicsBodies()
         -- start the physics engine

@@ -2,7 +2,7 @@
 --
 -- level1_screen.lua
 -- Created by: Linh Ho
--- Date: May 6th, 2019
+-- Date: May 6th
 -- Description: This is the level 1 screen of the game.
 -----------------------------------------------------------------------------------------
 
@@ -41,6 +41,7 @@ local backButton
 
 local firstScreen = audio.loadSound("Sounds/level1Screen.mp3")
 local firstScreenChannel
+
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------

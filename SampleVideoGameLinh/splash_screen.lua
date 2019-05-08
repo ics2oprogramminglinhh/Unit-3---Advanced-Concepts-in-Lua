@@ -162,8 +162,6 @@ function scene:hide( event )
 
     -- Called immediately after scene goes off screen.
     elseif ( phase == "did" ) then
-        
-        
     end
 
 end --function scene:hide( event )
