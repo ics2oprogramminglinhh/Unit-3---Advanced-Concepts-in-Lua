@@ -80,24 +80,24 @@ local function ScreenLimit( character )
     -- Checking if the the character is about to go off the right side of the screen
     if character.x > ( display.contentWidth - character.width / 2 ) then
             
-        character.x = character.x - 7.5
+        character.x = character.x - 6.5
 
     -- Checking if the character is about to go off the left side of the screen
     elseif character.x < ( character.width / 2 ) then
 
-        character.x = character.x + 7.5
+        character.x = character.x + 6.5
 
     -----------------------------------------------------------------------------------------
 
     -- Checking if the character is about to go off the bottom of the screen
     elseif character.y > ( display.contentHeight - character.height / 2 ) then
 
-        character.y = character.y - 7.5
+        character.y = character.y - 6.5
 
     -- Checking if the character is about to off the top of the screen
     elseif character.y < ( character.height / 2 ) then
 
-        character.y = character.y + 7.5
+        character.y = character.y + 6.5
 
     end
 end
@@ -215,7 +215,7 @@ local function Movement( touch )
 
 end --local function Movement( touch )
 
-local function onLocalCollision( self, event )
+local function onLocalCollisionwithMeat( self, event )
 
     if ( event.phase == "began" ) then
         --print( self.myName .. ": collision began with " .. event.other.myName )
@@ -243,54 +243,6 @@ local function onLocalCollisionWithSun( self, event )
         composer.gotoScene( "main_menu", {effect = "flipFadeOutIn", time = 500})
         restarted = 1
         
-    end
-
-end
-
-local function Meat1ButtonListener(touch)
-    if (touch.phase == "began") then 
-        meat1.isVisible = true
-        print (" meat1 is colliding with lion")
-
-    elseif (touch.phase == "ended") then 
-        composer.gotoScene( "Math", {effect = "flipFadeOutIn", time = 500})
-
-    end
-
-end
-
-local function Meat2ButtonListener(touch)
-    if (touch.phase == "began") then 
-        meat1.isVisible = true
-    end
-
-    if (touch.phase == "ended") then 
-        composer.gotoScene( "Math", {effect = "flipFadeOutIn", time = 500})
-
-    end
-
-end
-
-local function Meat3ButtonListener(touch)
-    if (touch.phase == "began") then 
-        meat1.isVisible = true
-    end
-
-    if (touch.phase == "ended") then 
-        composer.gotoScene( "Math", {effect = "flipFadeOutIn", time = 500})
-
-    end
-
-end
-
-local function Meat4ButtonListener(touch)
-    if (touch.phase == "began") then 
-        meat1.isVisible = true
-    end
-
-    if (touch.phase == "ended") then 
-        composer.gotoScene( "Math", {effect = "flipFadeOutIn", time = 500})
-
     end
 
 end
@@ -544,11 +496,11 @@ function scene:create( event )
 ----------------------------------------------------------------
 
     -- Add collision event listeners
-    lion.collision = onLocalCollision
-    meat2.collision = onLocalCollision
-    meat3.collision = onLocalCollision
-    meat4.collision = onLocalCollision
-    meat1.collision = onLocalCollision
+    lion.collision = onLocalCollisionwithMeat
+    meat2.collision = onLocalCollisionwithMeat
+    meat3.collision = onLocalCollisionwithMeat
+    meat4.collision = onLocalCollisionwithMeat
+    meat1.collision = onLocalCollisionwithMeat
     sun.collision = onLocalCollisionWithSun
 
 -------------------------------------------------------------------
@@ -707,18 +659,6 @@ function scene:show( event )
         meat1:addEventListener( "collision", meat1 )
         sun:addEventListener( "collision", sun )  
 
-        meat1:addEventListener("touch", Meat1ButtonListener)
-        meat2:addEventListener("touch", Meat2ButtonListener)
-        meat3:addEventListener("touch", Meat3ButtonListener)
-        meat4:addEventListener("touch", Meat4ButtonListener)
-
-        -- removing event listeners
-        meat1:removeEventListener("touch", Meat1ButtonListener)
-        meat2:removeEventListener("touch", Meat2ButtonListener)
-        meat3:removeEventListener("touch", Meat2ButtonListener)
-        meat4:removeEventListener("touch", Meat2ButtonListener)
-
-
     end
 
 end --function scene:show( event )
@@ -757,7 +697,7 @@ function scene:hide( event )
         -- Removing event listeners
         analogStick:removeEventListener( "touch", Movement )
         lion:removeEventListener( "collision", lion)
-        meat1:removeEventListener( "collision", meat1 )
+
         muteButton:removeEventListener("touch", Mute)
         unmuteButton:removeEventListener("touch", Unmute)
         RemovePhysicsBodies()
