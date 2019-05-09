@@ -24,7 +24,7 @@ local widget = require( "widget" )
 -----------------------------------------------------------------------------------------
 
 -- Naming Scene
-sceneName = "main_menu"
+sceneName = "level_select"
 
 -----------------------------------------------------------------------------------------
 
@@ -35,10 +35,10 @@ local scene = composer.newScene( sceneName )
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
 
-local bkg_image
-local playButton
-local creditsButton
-local instructionsButton
+local level1Button
+local level2Button
+local level3Button
+local backButton
 
 local muteButton
 local unmuteButton
@@ -65,13 +65,6 @@ soundOn = true
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 
--- Creating Transition Function to Credits Page
-local function CreditsTransition( )       
-    composer.gotoScene( "credits_screen", {effect = "slideRight", time = 500})
-end 
-
------------------------------------------------------------------------------------------
-
 -- Creating Transition to Level1 Screen
 local function Level1ScreenTransition( )
     composer.gotoScene( "level1_screen", {effect = "zoomInOutFade", time = 500})
@@ -79,11 +72,31 @@ end
 
 -----------------------------------------------------------------------------------------
 
--- Creating Transition to Instructions Page
+-- Creating Transition Function to Level2 Screen
+local function Level2ScreenTransition( )       
+    composer.gotoScene( "level2_screen", {effect = "slideRight", time = 500})
+end 
+
+-----------------------------------------------------------------------------------------
+
+-- Creating Transition to Level3 Screen
  
- local function InstructionsTransition( )
-    composer.gotoScene( "instructions_screen", {effect = "slideLeft", time = 500})
+ local function Level3ScreenTransition( )
+    composer.gotoScene( "level3_screen", {effect = "slideLeft", time = 500})
 end  
+
+-- Creating Transition to Level3 Screen
+ 
+ local function Level3ScreenTransition( )
+    composer.gotoScene( "level3_screen", {effect = "slideLeft", time = 500})
+end  
+
+-- Creating Transitioning Function back to main menu
+local function BackTransition( )
+    composer.gotoScene( "main_menu", {effect = "zoomOutInFade", time = 500})
+end
+
+-----------------------------------------------------------------------------------------
 
 local function Mute(touch)
     if (touch.phase == "ended") then
@@ -98,6 +111,8 @@ local function Mute(touch)
     end
 end
 
+-----------------------------------------------------------------------------------------
+
 local function Unmute(touch)
     if (touch.phase == "ended") then
         -- play the sound
@@ -110,19 +125,20 @@ local function Unmute(touch)
         unmuteButton.isVisible = false
     end
 end
+
 ------------------------------------------------------------------------------------------
 -- OBJECTS
 ------------------------------------------------------------------------------------------
 -- creating mute button
 muteButton = display.newImageRect("Images/Mute Button Unpressed.png", 100, 100)
-muteButton.x = 300
-muteButton.y = 700
+muteButton.x = 950
+muteButton.y = 50
 muteButton.isVisible = true
 
 -- creating unmute button
 unmuteButton = display.newImageRect("Images/Mute Button Pressed.png", 100, 100)
-unmuteButton.x = 300
-unmuteButton.y = 700
+unmuteButton.x = 950
+unmuteButton.y = 50
 unmuteButton.isVisible = false
 -----------------------------------------------------------------------------------------
 -- GLOBAL SCENE FUNCTIONS
@@ -139,90 +155,101 @@ function scene:create( event )
     -----------------------------------------------------------------------------------------
 
     -- Insert the background image and set it to the center of the screen
-    bkg_image = display.newImage("Images/main_menu.png")
-    bkg_image.x = display.contentCenterX
-    bkg_image.y = display.contentCenterY
-    bkg_image.width = display.contentWidth
-    bkg_image.height = display.contentHeight
-
-
-    -- Associating display objects with this scene 
-    sceneGroup:insert( bkg_image )
-
-    -- Send the background image to the back layer so all other objects can be on top
-    bkg_image:toBack()
+    display.setDefault("background", 46/255, 139/255, 87/255)
 
     -----------------------------------------------------------------------------------------
     -- BUTTON WIDGETS
     -----------------------------------------------------------------------------------------   
 
-    -- Creating Play Button
-    playButton = widget.newButton( 
+    -- Creating level1 Button
+    level1Button = widget.newButton( 
         {   
             -- Set its position on the screen relative to the screen size
-            x = 120,
+            x = 500,
 
-            y = 460,
+            y = 200,
 
             width = 200,
             height = 100,
 
             -- Insert the images here
-            defaultFile = "Images/Start Button Unpressed.png",
-            overFile = "Images/Start Button Pressed.png",
+            defaultFile = "Images/level1UnpressedLinhH@2x.png",
+            overFile = "Images/level1PressedLinhH@2x.png",
 
             -- When the button is released, call the Level1 screen transition function
             onRelease = Level1ScreenTransition
                       
         } )
 
-    -----------------------------------------------------------------------------------------
 
-    -- Creating Credits Button
-    creditsButton = widget.newButton( 
+    -- Creating level2 Button
+    level2Button = widget.newButton( 
         {
             -- Set its position on the screen relative to the screen size
-            x = 120,
-            y = 700,
+            x = 500,
+            y = 350,
 
             width = 200,
             height = 100,
             
             -- Insert the images here
-            defaultFile = "Images/Credits Button Unpressed.png",
-            overFile = "Images/Credits Button Pressed.png",
+            defaultFile = "Images/level2UnpressedLinhH@2x.png",
+            overFile = "Images/level2PressedLinhH@2x.png",
 
             -- When the button is released, call the Credits transition function
-            onRelease = CreditsTransition
+            onRelease = Level2ScreenTransition
         } ) 
     
-    -- Creating Instructions Button
+    -- Creating level3 Button
 
-    instructionsButton = widget.newButton( 
+    level3Button = widget.newButton( 
         {
             -- Set its position on the screen relative to the screen size
-            x = 120,
-            y = 580,
+            x = 500,
+            y = 500,
 
             width = 200,
             height = 100,
 
             -- Insert images here
-            defaultFile = "Images/Instructions Button Unpressed.png",
-            overFile = "Images/Instructions Button Pressed.png",
+            defaultFile = "Images/level3UnpressedLinhH@2x.png",
+            overFile = "Images/level3PressedLinhH@2x.png",
 
             -- When the button is released, call the Instructions transition function
-            onRelease = InstructionsTransition
+            onRelease = Level3ScreenTransition
         } ) 
 
+    -- Creating Back Button
+    backButton = widget.newButton( 
+    {
+        -- Setting Position
+        x = 100,
+        y = 700,
+
+        -- Setting Dimensions
+        width = 200,
+        height = 100,
+
+        -- Setting Visual Properties
+        defaultFile = "Images/BackButtonUnpressedLinhH.png",
+        overFile = "Images/BackButtonPressedLinhH.png",
+
+        -- Setting Functional Properties
+        onRelease = BackTransition
+
+    } )
+
+    -- send backButton to the front
+        backButton:toFront()
     -----------------------------------------------------------------------------------------
 
     -- Associating button widgets with this scene
-    sceneGroup:insert( playButton )
-    sceneGroup:insert( creditsButton )
-    sceneGroup:insert( instructionsButton )
+    sceneGroup:insert( level1Button )
+    sceneGroup:insert( level2Button )
+    sceneGroup:insert( level3Button )
     sceneGroup:insert( muteButton )
     sceneGroup:insert( unmuteButton )
+    sceneGroup:insert( backButton )
 end -- function scene:create( event )   
 
 -----------------------------------------------------------------------------------------

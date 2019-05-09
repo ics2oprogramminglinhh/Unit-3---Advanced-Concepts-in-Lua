@@ -85,6 +85,12 @@ end
     composer.gotoScene( "instructions_screen", {effect = "slideLeft", time = 500})
 end  
 
+-- Creating Transition to Level Select Page
+ 
+ local function LevelSelectTransition( )
+    composer.gotoScene( "level_select", {effect = "zoomInOutFade", time = 500})
+end  
+
 local function Mute(touch)
     if (touch.phase == "ended") then
         -- pause the sound
@@ -171,8 +177,8 @@ function scene:create( event )
             defaultFile = "Images/Start Button Unpressed.png",
             overFile = "Images/Start Button Pressed.png",
 
-            -- When the button is released, call the Level1 screen transition function
-            onRelease = Level1ScreenTransition
+            -- When the button is released, call the Level Select transition function
+            onRelease = LevelSelectTransition
                       
         } )
 
@@ -223,6 +229,7 @@ function scene:create( event )
     sceneGroup:insert( instructionsButton )
     sceneGroup:insert( muteButton )
     sceneGroup:insert( unmuteButton )
+    
 end -- function scene:create( event )   
 
 -----------------------------------------------------------------------------------------
