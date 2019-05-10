@@ -6,7 +6,11 @@
 -- Description: This is the level 1 screen of the game.
 -----------------------------------------------------------------------------------------
 
+-- hide the status bar
+display.setStatusBar(display.HiddenStatusBar)
 
+-- set the background colour
+display.setDefault("background", 107/255, 143/255, 221/255)
 
 -- Use Composer Library
 local composer = require( "composer" )
@@ -28,571 +32,258 @@ local scene = composer.newScene( sceneName )
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
 
+-- Create local variables
+local questionObject
+local correctObject
+local numericField
+local randomNumber1
+local randomNumber2
+local userAnswer
+local correctAnswer
+local randomNumber3
+local randomNumber4
 
--- Background and other images
-local bkg_image
-local x = display.newImage("Images/X.png", 350, 350)
-x.x = display.contentCenterX
-x.y = display.contentCenterY
-x.isVisible = false
-
-local check = display.newImage("Images/Check.png", 350, 350)
-check.x = display.contentCenterX
-check.y = display.contentCenterY
-check.isVisible = false
-
-
-
-local liveText = display.newText("Lives: ".. userLives, 0, 0, arial, 50 )
-liveText.anchorX = 0
-liveText.anchorY = 0
-liveText.x = 10
-liveText.y = 10
-liveText:setFillColor(1, 1, 1)
+-- Additional local variables
+local incorrectObject
+local pointsObject
+local points = 0
+local randomOperator
 
 
--- boolean variables telling me which answer box was touched
-local answerboxAlreadyTouched= false 
-local alternateAnswerBox1AlreadyTouched= false
-local alternateAnswerBox2AlreadyTouched= false 
-local alternateAnswerBox3AlreadyTouched= false
+-- Variables for the timer
+local totalSeconds = 10
+local secondsLeft = 10
+local clockText
+local countDownTimer
 
---create answerbox alternate answers and the boxes to show them
-local answerbox
-local alternateAnswerBox1
-local alternateAnswerBox2
-local alternateAnswerBox3
+local lives = 3
+local heart1
+local heart2
+local heart3
 
--- the black box where the user will drag the answer
-local userAnswerBoxPlaceholder
+-------------------------------------------------------------------------------------------
+-- SOUNDS
+-------------------------------------------------------------------------------------------
 
--- Variables containing the user answer and the actual answer
+local youLose
+local youLoseSound = audio.loadSound("Sounds/gameOver.mp3")
+local youLoseChannel
 
--- displays the answer and whether or not the answer was correct
-local answerText
+-- Correct sound
+local correctSound = audio.loadSound("Sounds/correct.mp3")
+local correctSoundChannel
 
-local numberOfLevelQuestions = 0
------------------------------------------------------------------------------------------
--- INITIALIZATIONS
------------------------------------------------------------------------------------------
-
---the text that displays the question
-local questionText = display.newText( "" , 0, 0, nil, 100)
---initiate variables and the question text
-questionText.x = display.contentWidth * 0.3
-questionText.y = display.contentHeight * 0.9
-
--- Variables containing the user answer and the actual answer
-local answer = 0
-local userAnswer = 0
-
-answerText = display.newText("", 0, 0, nil, 60)
-answerText.x = display.contentWidth * 0.2
-answerText.y = display.contentHeight * 0.2
-answerText.alpha = 0
-
---Gives feedback to the user on their answer
-responseText = display.newText ("", 0, 0, nil, 100)
-responseText.x = display.contentWidth * 0.2
-responseText.y = display.contentHeight * 0.4
-responseText.rotation = -20
-responseText:setFillColor(176/256, 23/256, 15/256)
-
--- boolean variables stating whether or not the answer was touched
-answerboxAlreadyTouched = false
-alternateAnswerBox1AlreadyTouched = false
-alternateAnswerBox2AlreadyTouched = false
-alternateAnswerBox3AlreadyTouched = false
-
---create answerbox alternate answers and the boxes to show them
-answerbox = display.newText("", display.contentWidth * 0.9, 0, nil, 100)
-alternateAnswerBox1 = display.newText("", 0, 0, nil, 100)
-alternateAnswerBox2 = display.newText("", 0, 0, nil, 100)
-alternateAnswerBox3 = display.newText("", 0, 0, nil, 100)
-
--- the black box where the user will drag the answer
-local userAnswerBoxPlaceholder = display.newImageRect("Images/userAnswerBoxPlaceholder.png",  130, 130, 0, 0)
-userAnswerBoxPlaceholder.x = display.contentWidth * 0.6
-userAnswerBoxPlaceholder.y = display.contentHeight * 0.9
-
+-- Wrong Sound
+local wrongSound = audio.loadSound("Sounds/wrong.mp3")
+local wrongSoundChannel
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
-local function livesReset()
-    liveText.text = "Lives: " .. userLives
+
+local function AskQuestion()
+    -- generate 2 random numbers between a max. and a min. number
+    randomNumber1 = math.random(10, 20)
+    randomNumber2 = math.random(10, 20)
+    randomNumber3 = math.random(0, 10)
+    randomNumber4 = math.random(0, 10)
+
+    -- changes the signs (-, +, *)
+    randomOperator = math.random(1, 3)
+
+    -- display points 
+    pointsObject.text = "Points" .. " = " .. points
+
+    if (randomOperator == 1) then 
+
+        -- calculate the correct answer
+        correctAnswer = randomNumber1 + randomNumber3
+
+        -- create question in text object
+        questionObject.text = randomNumber1 .. " + " .. randomNumber3 .. " = "
+
+    -- otherwise, if the random operator is 2, do subtraction
+    elseif (randomOperator == 2) then
+        correctAnswer = randomNumber2 - randomNumber4
+            
+        -- create question in text object 
+        questionObject.text = randomNumber2 .. " - " .. randomNumber4 .. " = "
+    end
+
+    if (randomOperator == 3) then
+            correctAnswer = randomNumber3 * randomNumber4 
+
+        -- create question in text object
+        questionObject.text = randomNumber3 .. " x " .. randomNumber4 .. " = "
+    -- otherwise, if the random operator is 4, do multiplication
+    end
 end
 
-local function backToLVone()
-    composer.gotoScene( "level1_screen", {effect = "zoomInOutFade", time = 1000})
+local function HideCorrect()
+    correctObject.isVisible = false
+    BackTransition()
 end
 
-local function backToLVtwo()
-    composer.gotoScene( "level2_screen", {effect = "zoomInOutFade", time = 1000})
+local function HideIncorrect()
+    incorrectObject.isVisible = false
+    BackTransition()
 end
-
-local function LevelStartDelay()
-    timer.performWithDelay(1600, LevelStart)
-end 
 
 local function YouLoseTransition()
     composer.gotoScene( "you_Lose", {effect = "zoomInOutFade", time = 1000})
 end
 
-local function hideCheckRestart()
-
-    check.isVisible = false
-    backToLVone()
-    
+-- Creating Transitioning Function back to main menu
+local function BackTransition( )
+    composer.gotoScene( "level1_screen", {effect = "zoomInOutFade", time = 500})
 end
 
-local function hideCheckRestart2()
+local function NumericFieldListener(event)
 
-    check.isVisible = false
-    backToLVtwo()
-    
-end
+    -- User begins editing "numericField"
+    if (event.phase == "began") then
 
-local function hideXRestart()
+        -- clear text field
+        event.target.text = ""
 
-    x.isVisible = false
-    LevelStart()
-end
+    elseif event.phase == "submitted" then
 
-local function ResetAnswerboxBooleans()
-    answerboxAlreadyTouched= false 
-    alternateAnswerBox1AlreadyTouched= false
-    alternateAnswerBox2AlreadyTouched= false 
-    alternateAnswerBox3AlreadyTouched= false
+        -- when the answer is submitted (enter key is pressed) set user input to user's answer
+        userAnswer = tonumber(event.target.text)
 
-end
+        -- if the users answer is correct
+        if (userAnswer == correctAnswer) then
+            correctObject.isVisible = true
+            incorrectObject.isVisible = false
+            correctSoundChannel = audio.play(correctSound)
+            timer.performWithDelay(2500, HideCorrect)
+            points = points + 1
+            pointsObject.text = "Points" .. " = ".. points
+            BackTransition()
 
-local function TouchListenerAnswerbox(touch)
-    
-    --only work if none of the other boxes have been touched
-        if alternateAnswerBox1AlreadyTouched == false and alternateAnswerBox2AlreadyTouched == false and alternateAnswerBox3AlreadyTouched == false then
+        elseif (userAnswer) then
+            correctObject.isVisible = false
+            incorrectObject.isVisible = true
+            wrongSoundChannel = audio.play(wrongSound)
+            timer.performWithDelay(2500, HideIncorrect)
+            lives = lives - 1
+            BackTransition()
 
-            if touch.phase == "began" then
-                --let other boxes know it has been clicked
-                answerboxAlreadyTouched = true
-
-            elseif touch.phase == "moved" then
-                --dragging function
-                answerbox.x = touch.x
-                answerbox.y = touch.y
-            elseif touch.phase == "ended" then
-                answerboxAlreadyTouched = false
-
-                -- if the box is in the userAnswerBox Placeholder  go to center of placeholder
-                if (((userAnswerBoxPlaceholder.x - userAnswerBoxPlaceholder.width/2) < answerbox.x ) and
-                    ((userAnswerBoxPlaceholder.x + userAnswerBoxPlaceholder.width/2) > answerbox.x ) and 
-                    ((userAnswerBoxPlaceholder.y - userAnswerBoxPlaceholder.height/2) < answerbox.y ) and 
-                    ((userAnswerBoxPlaceholder.y + userAnswerBoxPlaceholder.height/2) > answerbox.y ) ) then
-
-                    answerbox.x = display.contentWidth * 0.6
-                    answerbox.y = display.contentHeight * 0.9
-                    userAnswer = answer
-
-                     UserAnswerInput()
-
-                --else make box go back to where it was
-                else
-                    answerbox.x = display.contentWidth * 0.9
-                    answerbox.y = answerboxPreviousY
-                end
-            end
-        end                
-end -- end of TouchListenerAnswerbox(touch)
-
-local function TouchListenerAnswerBox1(touch)
-    --only work if none of the other boxes have been touched
-        if alternateAnswerBox2AlreadyTouched == false and answerboxAlreadyTouched == false and alternateAnswerBox3AlreadyTouched == false then
-
-            if touch.phase == "began" then
-                --let other boxes know it has been clicked
-               alternateAnswerBox1AlreadyTouched = true
-            
-             elseif touch.phase == "moved" then
-                --dragging function
-               alternateAnswerBox1.x = touch.x
-               alternateAnswerBox1.y = touch.y
-
-             elseif touch.phase == "ended" then
-                alternateAnswerBox1AlreadyTouched = false
-                -- if the box is in the userAnswerBox Placeholder  go to center of placeholder
-                if (((userAnswerBoxPlaceholder.x - userAnswerBoxPlaceholder.width/2) < alternateAnswerBox1.x ) and 
-                    ((userAnswerBoxPlaceholder.x + userAnswerBoxPlaceholder.width/2) > alternateAnswerBox1.x ) and 
-                    ((userAnswerBoxPlaceholder.y - userAnswerBoxPlaceholder.height/2) < alternateAnswerBox1.y ) and 
-                    ((userAnswerBoxPlaceholder.y + userAnswerBoxPlaceholder.height/2) > alternateAnswerBox1.y ) ) then
-
-                    alternateAnswerBox1.x = display.contentWidth * 0.6
-                    alternateAnswerBox1.y = display.contentHeight * 0.9
-                    userAnswer = alternateNumber1
-
-                    UserAnswerInput()
-
-                --else make box go back to where it was
-                else
-                alternateAnswerBox1.x = display.contentWidth * 0.9
-                alternateAnswerBox1.y = alternateAnswerBox1PreviousY
-                end
-            end
-        end
-
-end -- end of TouchListenerAnswerBox1(touch)
-
-local function TouchListenerAnswerBox2(touch)
-    --only work if none of the other boxes have been touched
-        if alternateAnswerBox1AlreadyTouched == false and answerboxAlreadyTouched == false and alternateAnswerBox3AlreadyTouched == false then
-
-            if touch.phase == "began" then
-                --let other boxes know it has been clicked
-               alternateAnswerBox2AlreadyTouched = true
-            
-             elseif touch.phase == "moved" then
-                --dragging function
-               alternateAnswerBox2.x = touch.x
-               alternateAnswerBox2.y = touch.y
-
-             elseif touch.phase == "ended" then
-                alternateAnswerBox2AlreadyTouched = false
-
-                -- if the box is in the userAnswerBox Placeholder  go to center of placeholder
-                if (((userAnswerBoxPlaceholder.x - userAnswerBoxPlaceholder.width/2) < alternateAnswerBox2.x ) and 
-                    ((userAnswerBoxPlaceholder.x + userAnswerBoxPlaceholder.width/2) > alternateAnswerBox2.x ) and 
-                    ((userAnswerBoxPlaceholder.y - userAnswerBoxPlaceholder.height/2) < alternateAnswerBox2.y ) and 
-                    ((userAnswerBoxPlaceholder.y + userAnswerBoxPlaceholder.height/2) > alternateAnswerBox2.y ) ) then
-
-                    alternateAnswerBox2.x = display.contentWidth * 0.6
-                    alternateAnswerBox2.y = display.contentHeight * 0.9
-                    userAnswer = alternateNumber2
-
-                    UserAnswerInput()
-
-                --else make box go back to where it was
-                else
-                alternateAnswerBox2.x = display.contentWidth * 0.9
-                alternateAnswerBox2.y = alternateAnswerBox2PreviousY
-                end
-            end
-        end
-
-end -- end of TouchListenerAnswerBox2(touch)
-    
-local function TouchListenerAnswerBox3(touch)
-    --only work if none of the other boxes have been touched
-        if alternateAnswerBox1AlreadyTouched == false and alternateAnswerBox2AlreadyTouched == false and answerboxAlreadyTouched == false then
-
-            if touch.phase == "began" then
-                --let other boxes know it has been clicked
-                alternateAnswerBox3AlreadyTouched = true
-           
-            elseif touch.phase == "moved" then
-                --dragging function
-                alternateAnswerBox3.x = touch.x
-                alternateAnswerBox3.y = touch.y
-
-            elseif touch.phase == "ended" then
-
-                alternateAnswerBox3AlreadyTouched = false
-                -- if the box is in the userAnswerBox Placeholder go to center of placeholder
-                if (((userAnswerBoxPlaceholder.x - userAnswerBoxPlaceholder.width/2) < alternateAnswerBox3.x ) and 
-                    ((userAnswerBoxPlaceholder.x + userAnswerBoxPlaceholder.width/2) > alternateAnswerBox3.x ) and 
-                    ((userAnswerBoxPlaceholder.y - userAnswerBoxPlaceholder.height/2) < alternateAnswerBox3.y ) and 
-                    ((userAnswerBoxPlaceholder.y + userAnswerBoxPlaceholder.height/2) > alternateAnswerBox3.y ) ) then
-
-                    alternateAnswerBox3.x = display.contentWidth * 0.6
-                    alternateAnswerBox3.y = display.contentHeight * 0.9
-                    userAnswer = alternateNumber3
-
-                    UserAnswerInput()
-
-                --else make box go back to where it was
-                else
-
-                alternateAnswerBox3.x = display.contentWidth * 0.9
-                alternateAnswerBox3.y = alternateAnswerBox3PreviousY
-
-                end
-            end
-        end
-end --end of TouchListenerAnswerBox3(touch)
-    
-
-local function AddAnswerBoxEventListeners()
-    print ("***Math.lua - added answer box event listeners")
-    answerbox:addEventListener("touch", TouchListenerAnswerbox)
-    alternateAnswerBox1:addEventListener("touch", TouchListenerAnswerBox1)
-    alternateAnswerBox2:addEventListener("touch", TouchListenerAnswerBox2)
-    alternateAnswerBox3:addEventListener("touch", TouchListenerAnswerBox3)
-
-end -- end of AddAnswerBoxEventListeners()
-
-local function RemoveAnswerBoxEventListeners()
-    print ("***Math.lua - removed answer box event listeners")
-    answerbox:removeEventListener("touch", TouchListenerAnswerbox)
-    alternateAnswerBox1:removeEventListener("touch", TouchListenerAnswerBox1)
-    alternateAnswerBox2:removeEventListener("touch", TouchListenerAnswerBox2)
-    alternateAnswerBox3:removeEventListener("touch", TouchListenerAnswerBox3)
-
-end -- end of AddAnswerBoxEventListeners()
-
-function UserAnswerInput()
-    local animationNumber
-    animationNumber = math.random(1,3)
-    RemoveAnswerBoxEventListeners()
-
-    numberOfLevelQuestions = numberOfLevelQuestions + 1
+    elseif (lives == 3) then
+        heart1.isVisible = true
+        heart2.isVisible = true
+        heart3.isVisible = true
+    elseif (lives == 2) then
+        heart1.isVisible = true
+        heart2.isVisible = true
+        heart3.isVisible = false
+    elseif (lives == 1) then
+        heart1.isVisible = true
+        heart2.isVisible = false
+        heart3.isVisible = false
+    elseif (lives == 0) then
+        heart1.isVisible = false
+        heart2.isVisible = false
+        heart3.isVisible = false
+            youLose.isVisible = true
+            numericField.isVisible = false
+            clockText.isVisible = false
+            youLoseSoundChannel = audio.play(youLose)
         
-    ----------------------------------------------------------------------------------
-    --disable buttons
-    ----------------------------------------------------------------------------------
-
-    answerboxAlreadyTouched = true
-    alternateAnswerBox1AlreadyTouched = true
-    alternateAnswerBox2AlreadyTouched = true
-    alternateAnswerBox3AlreadyTouched = true
-
-    --Change the response text
-        
-        -- if the user gets the right answer, tell them so
-        if (userAnswer == answer)and
-           (lvNumber == 1) then
-
-            check.isVisible = true
-
-            pumpkinNumber = pumpkinNumber + 1
-            
-            timer.performWithDelay( 2000, hideCheckRestart)             
         end
-
-        if (userAnswer == answer)and
-           (lvNumber == 2) then
-
-            check.isVisible = true
-
-            pumpkinNumber = pumpkinNumber + 1
-            
-            timer.performWithDelay( 2000, hideCheckRestart2)             
-        end
-
-
-        if (userAnswer ~= answer) then
-            userLives = userLives - 1  
-            liveText.text = "Lives: " .. userLives
-
-            
-            x.isVisible = true
-
-            timer.performWithDelay( 1000, hideXRestart )
-        end
-
-        --if player loses all lives then go to the you lose screen
-        if (userLives == 0) then
-
-            YouLoseTransition()
-        end 
-end
-
-------------------------------------------------------------------------------
-
-
-
-
-
-
-
-local function DisplayQuestion()
-    local randomNumber1
-    local randomNumber2
-
-    --set random numbers
-    randomNumber1 = math.random(9, 20)
-    randomNumber2 = math.random(6, 19)
-
-    questionText.text = randomNumber1 .. " + " .. randomNumber2 .. " = " 
-    --calculate answer
-
-    randomNumber1 = tonumber( randomNumber1 )
-    randomNumber2 = tonumber( randomNumber2 )
-
-    answer = randomNumber1 + randomNumber2
-end
-
-local function DisplayAnswers()
-        local alternateNumber1
-        local alternateNumber2
-        local alternateNumber3       
-        
-        --make sure boxes are not clicked at the beginning
-        answerboxAlreadyTouched = false
-        alternateAnswerBox1AlreadyTouched = false
-        alternateAnswerBox2AlreadyTouched = false
-        alternateAnswerBox3AlreadyTouched = false
-
-        --set response text to nothing
-        responseText.text = ""         
-
-        --make a different answer to the correct answer.
-        alternateNumber1 = answer + math.random(3, 5)
-        alternateAnswerBox1.text = alternateNumber1
-
-        alternateNumber2 = answer - math.random(1, 2)
-        --set random number to alternate option
-        alternateAnswerBox2.text = alternateNumber2
-
-        alternateNumber3 = answer + math.random(1, 2)
-        --set random number to alternate option
-        alternateAnswerBox3.text = alternateNumber3   
-
-        
-        answerbox.text = answer
--------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------
---ROMDOMLY SELECT ANSWER BOX POSITIONS
------------------------------------------------------------------------------------------
-    alternateAnswerBox1.x = display.contentWidth * 0.9
-    alternateAnswerBox2.x = display.contentWidth * 0.9
-    alternateAnswerBox3.x = display.contentWidth * 0.9
-    answerbox.x = display.contentWidth * 0.9
-
-    answerbox.y = math.random(1,4)
-
-    -------------------------
-    --situation 1
-    if (answerbox.y == 1) then
-        answerbox.y = display.contentHeight * 0.4
-
-        --alternateAnswerBox2
-        alternateAnswerBox2.y = display.contentHeight * 0.70
-
-        --alternateAnswerBox1
-        alternateAnswerBox1.y = display.contentHeight * 0.55
-
-        --alternateAnswerBox3
-        alternateAnswerBox3.y = display.contentHeight * 0.85
-
-        ---------------------------------------------------------
-        --remembering their positions
-        alternateAnswerBox1PreviousY = alternateAnswerBox1.y
-        alternateAnswerBox2PreviousY = alternateAnswerBox2.y
-        alternateAnswerBox3PreviousY = alternateAnswerBox3.y
-        answerboxPreviousY = answerbox.y 
-
-    --situation 2
-    elseif (answerbox.y == 2) then
-
-        answerbox.y = display.contentHeight * 0.55
-        
-        --alternateAnswerBox2
-        alternateAnswerBox2.y = display.contentHeight * 0.85
-
-        --alternateAnswerBox1
-        alternateAnswerBox1.y = display.contentHeight * 0.40
-
-        --alternateAnswerBox3
-        alternateAnswerBox3.y = display.contentHeight * 0.70
-
-
-        alternateAnswerBox1PreviousY = alternateAnswerBox1.y
-        alternateAnswerBox2PreviousY = alternateAnswerBox2.y
-        alternateAnswerBox3PreviousY = alternateAnswerBox3.y
-        answerboxPreviousY = answerbox.y 
-
-    --situation 3
-     elseif (answerbox.y == 3) then
-        answerbox.y = display.contentHeight * 0.70
-
-        --alternateAnswerBox2
-        alternateAnswerBox2.y = display.contentHeight * 0.55
-
-        --alternateAnswerBox1
-        alternateAnswerBox1.y = display.contentHeight * 0.85
-
-        --alternateAnswerBox3
-        alternateAnswerBox3.y = display.contentHeight * 0.40
-
-        alternateAnswerBox1PreviousY = alternateAnswerBox1.y
-        alternateAnswerBox2PreviousY = alternateAnswerBox2.y
-        alternateAnswerBox3PreviousY = alternateAnswerBox3.y
-        answerboxPreviousY = answerbox.y 
-
-    --situation 4
-     elseif (answerbox.y == 4) then
-        answerbox.y = display.contentHeight * 0.85
-
-        --alternateAnswerBox2
-        alternateAnswerBox2.y = display.contentHeight * 0.40
-
-        --alternateAnswerBox1
-        alternateAnswerBox1.y = display.contentHeight * 0.70
-
-        --alternateAnswerBox3
-        alternateAnswerBox3.y = display.contentHeight * 0.55
-
-        alternateAnswerBox1PreviousY = alternateAnswerBox1.y
-        alternateAnswerBox2PreviousY = alternateAnswerBox2.y
-        alternateAnswerBox3PreviousY = alternateAnswerBox3.y
-        answerboxPreviousY = answerbox.y 
-
+    -- clear text field
+    event.target.text = ""
     end
-    
+
 end
 
---[[local function displayScore()
+local function UpdateTime()
 
+    -- decrement the number of seconds
+    secondsLeft = secondsLeft - 1
 
-end]]--
-----------------------------------------------------------------------------------
-----------------------------------------------------------------------------------
---Starts the level
-----------------------------------------------------------------------------------
+    -- display the number of seconds left in the clock object
+    clockText.text = secondsLeft .. ""
 
-function LevelStart()
-        DisplayQuestion()
-        DisplayAnswers()             
-        AddAnswerBoxEventListeners()
-        ResetAnswerboxBooleans()    
-                
+    if (secondsLeft == 0) then
+        -- reset the number of seconds left
+        secondsLeft = totalSeconds 
+        lives = lives - 1
+        AskQuestion()
+
+        if (lives == 3) then
+            heart3.isVisible = false
+        elseif (lives == 2) then
+            heart2.isVisible = false
+        elseif (lives == 1) then
+            heart1.isVisible = false
+            youLose.isVisible = true
+            numericField.isVisible = false
+            clockText.isVisible = false
+            youLoseSoundChannel = audio.play(youLose)
+            -- clear text field
+            event.target.text = ""
+        end
+    end
 end
 
+-- function that calls the timer
+local function StartTimer()
+    -- create a countdown timer that loops infinitely
+    countDownTimer = timer.performWithDelay(1500, UpdateTime, 0)
+end
 
--- The function called when the screen doesn't exist
-function scene:create( event )
+------------------------------------------------------------------------------------------
+-- OBJECT CREATION
+------------------------------------------------------------------------------------------
 
-    -- Creating a group that associates objects with the scene
-    local sceneGroup = self.view
+-- displays a question and sets the colour
+questionObject = display.newText("", display.contentWidth/3, display.contentHeight/2, nil, 70)
+questionObject:setTextColor(0/255, 0/255, 0/255)
 
-    ----------------------------------------------------------------------------------
-    ----------------------------------------------------------------------------------
-    --Inserting backgroud image and lives
-    ----------------------------------------------------------------------------------
+-- displays points and sets the colour
+pointsObject = display.newText("", 300, 150, Arial, 30)
+pointsObject:setTextColor(128/255, 128/255, 128/255)
 
-    -- Insert the background image
-    bkg_image = display.newImageRect("Images/Game Screen.png", 2048, 1536)
-    bkg_image.anchorX = 0
-    bkg_image.anchorY = 0
-    bkg_image.width = display.contentWidth
-    bkg_image.height = display.contentHeight
+-- create the correct text object and make it invisible
+correctObject = display.newText( "Correct!", display.contentWidth/2, display.contentHeight/3, nil, 100)
+correctObject:setTextColor(50/255, 128/255, 50/255)
+correctObject.isVisible = false
 
+-- create the incorrect text object and make it invisible 
+incorrectObject = display.newText("Incorrect", display.contentWidth/2, display.contentHeight/3, nil, 100)
+incorrectObject:setTextColor(70/255, 90/255, 120/255)
+incorrectObject.isVisible = false
+-- Create numeric field
+numericField = native.newTextField(500, display.contentWidth/2, display.contentHeight/2, 100, 100)
+numericField.inputType = "number"
 
-    ----------------------------------------------------------------------------------
-    ----------------------------------------------------------------------------------
-    --adding objects to the scene group
-    ----------------------------------------------------------------------------------
- 
-    sceneGroup:insert( bkg_image ) 
-    sceneGroup:insert( questionText ) 
-    sceneGroup:insert( userAnswerBoxPlaceholder )
-    sceneGroup:insert( answerbox )
-    sceneGroup:insert( alternateAnswerBox1 )
-    sceneGroup:insert( alternateAnswerBox2 )
-    sceneGroup:insert( alternateAnswerBox3 )
-    sceneGroup:insert( answerText )
-    sceneGroup:insert( x )
-    sceneGroup:insert( liveText ) 
-    sceneGroup:insert( check )
+-- create the lives to display on the screen
+heart1 = display.newImageRect("Images/heart.png", 100, 100)
+heart1.x = display.contentWidth * 9.5 / 10
+heart1.y = display.contentHeight * 1 / 8
 
-end --function scene:create( event )
+heart2 = display.newImageRect("Images/heart.png", 100, 100)
+heart2.x = display.contentWidth * 8.5 / 10
+heart2.y = display.contentHeight * 1 / 8
+
+heart3 = display.newImageRect("Images/heart.png", 100, 100)
+heart3.x = display.contentWidth * 7.5 / 10
+heart3.y = display.contentHeight * 1 / 8
+
+-- display the timer
+clockText = display.newText("", 100, 100, Arial, 50)
+clockText:setTextColor(204/255, 0/255, 0/255)
+
+-- youLose Screen
+youLose = display.newImageRect("Images/youLose.png", 1100, 1100)
+youLose.x = 500
+youLose.y = 400
+youLose.isVisible = false
+
+-- add the event listener for the numeric field
+numericField:addEventListener( "userInput", NumericFieldListener )
+
+-----------------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------------
 
@@ -601,33 +292,30 @@ function scene:show( event )
 
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
+
+    -----------------------------------------------------------------------------------------
+
     local phase = event.phase
 
     -----------------------------------------------------------------------------------------
 
+    -- Called when the scene is still off screen (but is about to come on screen).   
     if ( phase == "will" ) then
+       
+    -----------------------------------------------------------------------------------------
 
-        -- Called when the scene is still off screen (but is about to come on screen).    
-        
-
-    elseif ( phase == "did" ) then
-
-        -- Called when the scene is now on screen.
-        -- Insert code here to make the scene come alive.
-        -- Example: start timers, begin animation, play audio, etc.
-        LevelStart()
-        livesReset()
-
+    -- Called when the scene is now on screen.
+    -- Insert code here to make the scene come alive.
+    -- Example: start timers, begin animation, play audio, etc.
+    elseif ( phase == "did" ) then       
+        -- Play the background music for this scene
+        youLoseChannel = audio.play(youLose)
+        heart1.isVisible = true
+        heart2.isVisible = true
+        heart3.isVisible = true
+        clockText.isVisible = true
     end
-
-end --function scene:show( event )
-
------------------------------------------------------------------------------------------
-
--- Custom function for resuming the game (from pause state)
-function scene:resumeGame()
-   composer.hideOverlay( "fade", 400)
-end
+end -- function scene:show( event )
 
 -----------------------------------------------------------------------------------------
 
@@ -644,7 +332,12 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
-        
+        audio.stop(correctSound)
+        heart1.isVisible = false
+        heart2.isVisible = false
+        heart3.isVisible = false
+        clockText.isVisible = false
+        numericField:removeEventListener("userInput", NumericFieldListener)
 
     -----------------------------------------------------------------------------------------
 
