@@ -91,17 +91,13 @@ local function AskQuestion()
         questionObject.text = randomNumber2 .. " - " .. randomNumber4 .. " = "
     end
 
+        -- otherwise, if the random operator is 4, do multiplication
     if (randomOperator == 3) then
             correctAnswer = randomNumber3 * randomNumber4 
 
         -- create question in text object
         questionObject.text = randomNumber3 .. " x " .. randomNumber4 .. " = "
-    -- otherwise, if the random operator is 4, do multiplication
-    elseif (randomOperator == 4) then
-            correctAnswer = randomNumber3 / randomNumber4
 
-        -- create question in text object
-            questionObject.text = randomNumber3 .. "/" .. randomNumber4 .. "="
     end
 end
 
