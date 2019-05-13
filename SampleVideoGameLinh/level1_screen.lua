@@ -132,8 +132,6 @@ local function RuntimeEvents()
             -- Checking if the joystick is pointing to the right
             if direction == 1 or direction == 2 or direction == 8 then
 
-
-
                 -- Setting the status of the character's directions
                 facingWhichDirection = "right"
 
@@ -225,6 +223,7 @@ local function onLocalCollisionwithMeat( self, event )
         --print( self.myName .. ": collision ended with " .. event.other.myName )
         print ("*** end of lion collision with meat")
         composer.gotoScene( "Math", {effect = "flipFadeOutIn", time = 500})
+
     end
 
 end
@@ -503,6 +502,13 @@ function scene:create( event )
     meat1.collision = onLocalCollisionwithMeat
     sun.collision = onLocalCollisionWithSun
 
+    -- Add Event Listeners
+        lion:addEventListener( "collision", lion)
+        meat2:addEventListener( "collision", meat2 )
+        meat3:addEventListener( "collision", meat3 )
+        meat4:addEventListener( "collision", meat4 ) 
+        meat1:addEventListener( "collision", meat1 )
+        sun:addEventListener( "collision", sun )  
 -------------------------------------------------------------------
     
 -- Creating the background image
@@ -651,14 +657,6 @@ function scene:show( event )
         analogStick:addEventListener( "touch", Movement )
         Runtime:addEventListener("enterFrame", RuntimeEvents)
 
-        -- Add Event Listeners
-        lion:addEventListener( "collision", lion)
-        meat2:addEventListener( "collision", meat2 )
-        meat3:addEventListener( "collision", meat3 )
-        meat4:addEventListener( "collision", meat4 ) 
-        meat1:addEventListener( "collision", meat1 )
-        sun:addEventListener( "collision", sun )  
-
     end
 
 end --function scene:show( event )
@@ -696,10 +694,10 @@ function scene:hide( event )
 
         -- Removing event listeners
         analogStick:removeEventListener( "touch", Movement )
-        lion:removeEventListener( "collision", lion)
-
-        muteButton:removeEventListener("touch", Mute)
-        unmuteButton:removeEventListener("touch", Unmute)
+        lion:removeEventListener( "collision", lion )
+        muteButton:removeEventListener( "touch", Mute )
+        unmuteButton:removeEventListener( "touch ", Unmute )
+        meat1:removeEventListener( "collision ", meat1 )
         RemovePhysicsBodies()
 
         -- start the physics engine

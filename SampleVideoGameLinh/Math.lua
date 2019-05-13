@@ -1,13 +1,15 @@
 -----------------------------------------------------------------------------------------
 --
--- game_level1.lua
--- Created by: Jadon
--- Date: Nov. 22nd, 2014
+-- level1_screen.lua
+-- Created by: Gil Robern
+-- Modified by: Your Name
+-- Date: Month Day, Year
 -- Description: This is the level 1 screen of the game.
 -----------------------------------------------------------------------------------------
 
--- hide the status bar
-display.setStatusBar(display.HiddenStatusBar)
+-----------------------------------------------------------------------------------------
+-- INITIALIZATIONS
+-----------------------------------------------------------------------------------------
 
 -- Use Composer Library
 local composer = require( "composer" )
@@ -20,226 +22,381 @@ local widget = require( "widget" )
 -----------------------------------------------------------------------------------------
 
 -- Naming Scene
-sceneName = "Math"
+sceneName = "level1_screen"
+
+-----------------------------------------------------------------------------------------
 
 -- Creating Scene Object
 local scene = composer.newScene( sceneName )
 
-------------------------------------------------------------------------------------------
--- LOCAL VARIABLES 
-------------------------------------------------------------------------------------------
-
--- Create local variables
-local questionObject
-local correctObject
-local numericField
-local randomNumber1
-local randomNumber2
-local userAnswer
-local correctAnswer
-
--- Additional local variables
-local incorrectObject
-local pointsObject
-local points = 0
-local randomOperator
-local randomNumber3
-local randomNumber4
-
--------------------------------------------------------------------------------------------
--- SOUNDS
--------------------------------------------------------------------------------------------
-
--- Correct sound
-local correctSound = audio.loadSound("Sounds/correct.mp3")
-local correctSoundChannel
-
--- Wrong Sound
-local wrongSound = audio.loadSound("Sounds/wrong.mp3")
-local wrongSoundChannel
-
--------------------------------------------------------------------------------------------
--- LOCAL FUNCTIONS
--------------------------------------------------------------------------------------------
-
-local function AskQuestion()
--- generate a random number between 1 and 4
-    randomOperator = math.random(1, 4)
-
-    -- generate 2 random numbers between a max. and a min. number
-    randomNumber1 = math.random(10, 20)
-    randomNumber2 = math.random(10, 20)
-    randomNumber3 = math.random(0, 10)
-    randomNumber4 = math.random(0, 10)
-
-    -- display points 
-    pointsObject.text = "Points" .. " = " .. points
-
-    if (randomOperator == 1) then 
-
-        -- calculate the correct answer
-        correctAnswer = randomNumber1 + randomNumber3
-
-        -- create question in text object
-        questionObject.text = randomNumber1 .. " + " .. randomNumber3 .. " = "
-
-    -- otherwise, if the random operator is 2, do subtraction
-    elseif (randomOperator == 2) then
-        correctAnswer = randomNumber2 - randomNumber4
-            
-        -- create question in text object 
-        questionObject.text = randomNumber2 .. " - " .. randomNumber4 .. " = "
-    end
-
-        -- otherwise, if the random operator is 4, do multiplication
-    if (randomOperator == 3) then
-            correctAnswer = randomNumber3 * randomNumber4 
-
-        -- create question in text object
-        questionObject.text = randomNumber3 .. " x " .. randomNumber4 .. " = "
-
-    end
-end
-
-local function HideCorrect()
-    correctObject.isVisible = false
-    AskQuestion()
-end
-
-local function HideIncorrect()
-    incorrectObject.isVisible = false
-    AskQuestion()
-end
-
--- Creating Transitioning Function back to main menu
-local function BackTransition()
-    composer.gotoScene( "level1_screen", {effect = "zoomInOutFade", time = 500})
-    numericField = false
-end
-
--- Creating transitioning funtion to restart when you win or you lose
-local function Restart()
-    NumericFieldListener()
-    UpdateTime()
-    lives = 3
-
-end
-
-local function NumericFieldListener(event)
-
-    -- User begins editing "numericField"
-    if (event.phase == "began") then
-
-        -- clear text field
-        event.target.text = ""
-
-    elseif event.phase == "submitted" then
-
-        -- when the answer is submitted (enter key is pressed) set user input to user's answer
-        userAnswer = tonumber(event.target.text)
-
-        -- if the users answer is correct
-        if (userAnswer == correctAnswer) then
-            correctObject.isVisible = true
-            incorrectObject.isVisible = false
-            correctSoundChannel = audio.play(correctSound)
-            timer.performWithDelay(1500, HideCorrect)
-            points = points + 1
-            pointsObject.text = "Points" .. " = ".. points
-
-        elseif (userAnswer) then
-            correctObject.isVisible = false
-            incorrectObject.isVisible = true
-            wrongSoundChannel = audio.play(wrongSound)
-            timer.performWithDelay(1500, HideIncorrect)
-            BackTransition()
-
-        end
-    end 
-end
-
-------------------------------------------------------------------------------------------
--- OBJECT CREATION
-------------------------------------------------------------------------------------------
-
--- displays a question and sets the colour
-questionObject = display.newText("", display.contentWidth/3, display.contentHeight/2, nil, 70)
-questionObject:setTextColor(0/255, 0/255, 0/255)
-
--- displays points and sets the colour
-pointsObject = display.newText("", 300, 150, Arial, 30)
-pointsObject:setTextColor(128/255, 128/255, 128/255)
-
--- create the correct text object and make it invisible
-correctObject = display.newText( "Correct!", display.contentWidth/2, display.contentHeight/3, nil, 100)
-correctObject:setTextColor(50/255, 128/255, 50/255)
-correctObject.isVisible = false
-
--- create the incorrect text object and make it invisible 
-incorrectObject = display.newText("Incorrect", display.contentWidth/2, display.contentHeight/3, nil, 100)
-incorrectObject:setTextColor(70/255, 90/255, 120/255)
-incorrectObject.isVisible = false
--- Create numeric field
-numericField = native.newTextField(500, display.contentWidth/2, display.contentHeight/2, 100, 100)
-numericField.inputType = "number"
-
--- add the event listener for the numeric field
-numericField:addEventListener( "userInput", NumericFieldListener )
-
+-----------------------------------------------------------------------------------------
+-- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
 
+-- The local variables for this scene
+local bkg
+
+-- determine the range for the numbers to add
+local MIN_NUM = 1
+local MAX_NUM = 10
+
+-- the variables containing the first and second numbers to add for the equation
+local firstNumber
+local secondNumber
+local thirdNumber
+
+-- the variables that will hold the correct answer and the wrong answers
+local answer 
+local wrongAnswer1
+local wrongAnswer2
+local wrongAnswer3
+-- the text object that will hold the addition equation
+
+local addEquationTextObject 
+
+-- the text objects that will hold the correct answer and the wrong answers
+local answerTextObject 
+local wrongAnswer1TextObject
+local wrongAnswer2TextObject
+local wrongAnswer3TextObject
+
+-- displays the number correct that the user has
+local numberCorrectText 
+
+-- displays the number of lives the user has
+local livesText 
+
+-- the text displaying congratulations
+local congratulationText 
+
+-- Displays text that says correct.
+local correct 
+
+-- Displays text that says incorrect.
+local incorrect
+
+-- Displays the level text of time text
+local level1Text 
+
+-- Boolean variable that states if user clicked the answer or not
+local alreadyClickedAnswer = false
+
+-----------------------------------------------------------------------------------------
+-- SOUNDS
+-----------------------------------------------------------------------------------------
+
+local correctAnswer = audio.loadSound("Sounds/CorrectAnswer.mp3")
+local correctAnswerChannel
+
+local wrongAnswer = audio.loadSound("Sounds/WrongBuzzer.mp3")
+local wrongAnswerChannel
+
+-----------------------------------------------------------------------------------------
+-- LOCAL FUNCTIONS
+-----------------------------------------------------------------------------------------
+
+local function DetermineAnswers()
+    -- calculate the correct answer as well as the wrong answers
+    answer = firstNumber + secondNumber
+    wrongAnswer1 = answer + math.random(1,4)
+    wrongAnswer2 = answer + math.random(5,8)
+    wrongAnswer3 = answer - math.random(1,4)
+end
+
+-- Function that changes the answers for a new question and places them randomly in one of the positions
+local function DisplayAnswers( )
+
+    local answerPosition = math.random(1,3)
+    answerTextObject.text = tostring( answer )
+    wrongAnswer1TextObject.text = tostring( wrongAnswer1 )
+    wrongAnswer2TextObject.text = tostring( wrongAnswer2 )
+    wrongAnswer3TextObject.text = tostring( wrongAnswer3 )
+
+    if (answerPosition == 1) then                
+        
+        answerTextObject.x = display.contentWidth*.3        
+        wrongAnswer1TextObject.x = display.contentWidth*.2
+        wrongAnswer2TextObject.x = display.contentWidth*.1 
+        wrongAnswer3TextObject.x = display.contentWidth*.4
+    elseif (answerPosition == 2) then
+       
+        answerTextObject.x = display.contentWidth*.2        
+        wrongAnswer1TextObject.x = display.contentWidth*.1
+        wrongAnswer2TextObject.x = display.contentWidth*.4
+        wrongAnswer3TextObject.x = display.contentWidth*.3
+    else
+       
+        answerTextObject.x = display.contentWidth*.1        
+        wrongAnswer1TextObject.x = display.contentWidth*.2
+        wrongAnswer2TextObject.x = display.contentWidth*.4
+        wrongAnswer3TextObject.x = display.contentWidth*.3
+    end
+
+end
+
+-- Function that transitions to Lose Screen
+local function LoseScreenTransition( )        
+    composer.gotoScene( "you_lose", {effect = "zoomInOutFade", time = 1000})
+end 
+
+-- Function that transitions to Lose Screen
+local function BackScreenTransition( )        
+    composer.gotoScene( "level1_screen", {effect = "zoomInOutFade", time = 1000})
+end 
+
+-- The function that displays the equation and determines the answer and the wrong answers
+local function DisplayAddEquation()
+    -- local variables to this function
+    local addEquationString
+
+    -- choose the numbers to add randomly
+    firstNumber = math.random(MIN_NUM, MAX_NUM)
+    secondNumber = math.random(MIN_NUM, MAX_NUM)
+
+    -- create the addition equation to display
+    addEquationString = firstNumber .. " + " .. secondNumber .. " = " 
+
+    -- displays text on text object
+    addEquationTextObject.text = addEquationString
+end
+
+
+local function RestartScene()
+
+    alreadyClickedAnswer = false
+    correct.isVisible = false
+    incorrect.isVisible = false
+
+    livesText.text = "Number of lives = " .. tostring(lives)
+    numberCorrectText.text = "Number correct = " .. tostring(numberCorrect)
+
+    -- if they have 3 points, go to the You Win Screen
+    if (numberCorrect == 3) then
+        composer.gotoScene("you_win")
+    else
+        DisplayAddEquation()
+        DetermineAnswers()
+        DisplayAnswers()
+    end
+
+    -- if they have 0 lives, go to the You Lose screen
+    if (lives == 0) then
+        composer.gotoScene("you_lose")
+    else 
+
+        DisplayAddEquation()
+        DetermineAnswers()
+        DisplayAnswers()
+    end
+end
+
+-- Functions that checks if the buttons have been clicked.
+local function TouchListenerAnswer(touch)
+    -- get the user answer from the text object that was clicked on
+    local userAnswer = answerTextObject.text
+
+    if (touch.phase == "ended") and (alreadyClickedAnswer == false) then
+
+        alreadyClickedAnswer = true
+
+        -- if the user gets the answer right, display Correct and call RestartSceneRight
+        if (answer == tonumber(userAnswer)) then     
+            correct.isVisible = true
+            correctAnswerChannel = audio.play(correctAnswer)
+            -- increase the number correct by 1
+            numberCorrect = numberCorrect + 1
+            -- go back to level 1 screen
+            timer.performWithDelay( 1000, BackScreenTransition )    
+
+        end
+
+    end
+end
+
+local function TouchListenerWrongAnswer1(touch)
+    -- get the user answer from the text object that was clicked on
+    local userAnswer = wrongAnswer1TextObject.text
+
+    if (touch.phase == "ended") and (alreadyClickedAnswer == false) then
+
+        alreadyClickedAnswer = true
+
+        if (answer ~= tonumber(userAnswer)) then
+            incorrect.isVisible = true
+            -- decrease a life
+            lives = lives - 1
+            -- call RestartScene after 1 second
+            timer.performWithDelay( 1000, RestartScene )            
+        end        
+
+    end
+end
+
+local function TouchListenerWrongAnswer2(touch)
+    -- get the user answer from the text object that was clicked on
+    local userAnswer = wrongAnswer2TextObject.text
+
+      
+        if (touch.phase == "ended") and (alreadyClickedAnswer == false) then
+
+            alreadyClickedAnswer = true
+
+
+            if (answer ~= tonumber(userAnswer)) then
+                incorrect.isVisible = true
+                wrongAnswerChannel = audio.play(wrongAnswer)
+                -- decrease a life
+                lives = lives - 1
+                -- call RestartScene after 1 second
+                timer.performWithDelay( 1000, RestartScene )            
+            end        
+    
+        end
+end
+
+local function TouchListenerWrongAnswer3(touch)
+    -- get the user answer from the text object that was clicked on
+    local userAnswer = wrongAnswer3TextObject.text
+
+    if (touch.phase == "ended") and (alreadyClickedAnswer == false) then
+
+        alreadyClickedAnswer = true
+
+        if (answer ~= tonumber(userAnswer)) then
+            incorrect.isVisible = true
+            wrongAnswerChannel = audio.play(wrongAnswer)
+            -- decrease a life
+            lives = lives - 1
+            -- call RestartScene after 1 second
+            timer.performWithDelay( 1000, RestartScene )            
+        end        
+
+    end
+end
+    
+-- Function that adds the touch listeners to each of the answer objects
+local function AddTextObjectListeners()
+
+    answerTextObject:addEventListener("touch", TouchListenerAnswer)
+    wrongAnswer1TextObject:addEventListener("touch", TouchListenerWrongAnswer1)
+    wrongAnswer2TextObject:addEventListener("touch", TouchListenerWrongAnswer2)
+    wrongAnswer3TextObject:addEventListener("touch", TouchListenerWrongAnswer3)
+end
+
+-- Function that removes the touch listeners from each of the answer objects
+local function RemoveTextObjectListeners()
+
+    answerTextObject:removeEventListener("touch", TouchListenerAnswer)
+    wrongAnswer1TextObject:removeEventListener("touch", TouchListenerWrongAnswer1)
+    wrongAnswer2TextObject:removeEventListener("touch", TouchListenerWrongAnswer2)
+    wrongAnswer3TextObject:removeEventListener("touch", TouchListenerWrongAnswer3)
+
+end
+
+-----------------------------------------------------------------------------------------
+-- GLOBAL SCENE FUNCTIONS
+-----------------------------------------------------------------------------------------
 -- The function called when the screen doesn't exist
 function scene:create( event )
 
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
 
-    ----------------------------------------------------------------------------------
-    --adding objects to the scene group
-    ----------------------------------------------------------------------------------
- 
-    sceneGroup:insert(questionObject)
-    sceneGroup:insert(pointsObject)
-    sceneGroup:insert(correctObject)
-    sceneGroup:insert(incorrectObject)
-    sceneGroup:insert( numericField )
+    -----------------------------------------------------------------------------------------
 
-end --function scene:create( event )
+    -- Insert the background image
+    bkg = display.newImageRect("Images/level1bkg.png", display.contentWidth, display.contentHeight)
+    bkg.x = display.contentCenterX
+    bkg.y = display.contentCenterY
+    bkg.width = display.contentWidth
+    bkg.height = display.contentHeight
 
+    -- create the text object that will hold the add equation. Make it empty for now.
+    addEquationTextObject = display.newText( "", display.contentWidth*1/4, display.contentHeight*2/5, nil, 50 )
+
+    -- sets the color of the add equation text object
+    addEquationTextObject:setTextColor(155/255, 42/255, 198/255)
+
+    -- create the text objects that will hold the correct answer and the wrong answers
+    answerTextObject = display.newText("", display.contentWidth*.4, display.contentHeight/2, nil, 50 )
+    wrongAnswer1TextObject = display.newText("", display.contentWidth*.1, display.contentHeight/2, nil, 50 )
+    wrongAnswer2TextObject = display.newText("", display.contentWidth*.3, display.contentHeight/2, nil, 50 )
+    wrongAnswer3TextObject = display.newText("", display.contentWidth*.2, display.contentHeight/2, nil, 50 )
+    numberCorrectText = display.newText("", display.contentWidth*4/5, display.contentHeight*6/7, nil, 25)
+
+    -- create the text object that will hold the number of lives
+    livesText = display.newText("", display.contentWidth*4/5, display.contentHeight*8/9, nil, 25) 
+
+    -- create the text object that will say congratulations, set the colour and then hide it
+    congratulationText = display.newText("Good job!", display.contentWidth/2, display.contentHeight*2/5, nil, 50 )
+    congratulationText:setTextColor(57/255, 230/255, 0)
+    congratulationText.isVisible = false
+
+    -- create the text object that will say Correct, set the colour and then hide it
+    correct = display.newText("Correct", display.contentWidth/2, display.contentHeight*1/3, nil, 50 )
+    correct:setTextColor(100/255, 47/255, 210/255)
+    correct.isVisible = false
+
+    -- create the text object that will say incorrect, set the colour and then hide it
+    incorrect = display.newText("Incorrect", display.contentWidth/2, display.contentHeight*1/3, nil, 50 )
+    incorrect:setTextColor(100/255, 47/255, 210/255)
+    incorrect.isVisible = false
+
+
+    -- create the text object that will say Out of Time, set the colour and then hide it
+    outOfTimeText = display.newText("Out of Time!", display.contentWidth*2/5, display.contentHeight*1/3, nil, 50)
+    outOfTimeText:setTextColor(100/255, 47/255, 210/255)
+    outOfTimeText.isVisible = false
+
+    -- display the level text of time text and set the colour
+    level1Text = display.newText("Level 1", 500, 100, nil, 50)
+    level1Text:setTextColor(0, 0, 0)
+    
+    -- Insert objects into scene group
+    sceneGroup:insert( bkg )  
+    sceneGroup:insert( numberCorrectText )
+    sceneGroup:insert( livesText )
+    sceneGroup:insert( addEquationTextObject )
+    sceneGroup:insert( answerTextObject )
+    sceneGroup:insert( wrongAnswer1TextObject )
+    sceneGroup:insert( wrongAnswer2TextObject )
+    sceneGroup:insert( wrongAnswer3TextObject )
+    sceneGroup:insert( congratulationText )
+    sceneGroup:insert( correct )
+    sceneGroup:insert( incorrect )
+    sceneGroup:insert( level1Text )
+end
+
+-----------------------------------------------------------------------------------------
+-- FUNCTIONS
 -----------------------------------------------------------------------------------------
 
 -- The function called when the scene is issued to appear on screen
 function scene:show( event )
 
     -- Creating a group that associates objects with the scene
-    local sceneGroup = self.view
+    --local sceneGroup = self.view
     local phase = event.phase
-
     -----------------------------------------------------------------------------------------
 
     if ( phase == "will" ) then
 
-        -- Called when the scene is still off screen (but is about to come on screen).    
-        
-
+        -- Called when the scene is still off screen (but is about to come on screen).
+    -----------------------------------------------------------------------------------------
     elseif ( phase == "did" ) then
 
-        -- Called when the scene is now on screen.
-        -- Insert code here to make the scene come alive.
-        -- Example: start timers, begin animation, play audio, etc.
-        AskQuestion()
+        -- initialize the number of lives and number correct 
+        lives = 3
+        numberCorrect = 0
 
+        -- listeners to each of the answer text objects
+        AddTextObjectListeners()        
+
+        -- call the function to restart the scene
+        RestartScene()
     end
 
-end --function scene:show( event )
-
------------------------------------------------------------------------------------------
-
--- Custom function for resuming the game (from pause state)
-function scene:resumeGame()
-   composer.hideOverlay( "fade", 400)
 end
-
 -----------------------------------------------------------------------------------------
 
 -- The function called when the scene is issued to leave the screen
@@ -248,50 +405,35 @@ function scene:hide( event )
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
     local phase = event.phase
-
     -----------------------------------------------------------------------------------------
-
     if ( phase == "will" ) then
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
-        
-
+        -- remove the listeners when leaving the scene
+        RemoveTextObjectListeners()
     -----------------------------------------------------------------------------------------
-
     elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.
     end
-
-end --function scene:hide( event )
-
+end
 -----------------------------------------------------------------------------------------
-
 -- The function called when the scene is issued to be destroyed
 function scene:destroy( event )
 
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
-
     -----------------------------------------------------------------------------------------
-
-
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.
     -- Example: remove display objects, save state, etc.
 end
-
 -----------------------------------------------------------------------------------------
 -- EVENT LISTENERS
 -----------------------------------------------------------------------------------------
-
-
--- Adding Event Listeners
+-- Adding Event Listeners for Scene
 scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
-
 -----------------------------------------------------------------------------------------
-
 return scene
