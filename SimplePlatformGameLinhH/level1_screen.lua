@@ -100,6 +100,12 @@ local function up (touch)
     end
 end
 
+local function down (touch)
+    if (character ~= nil) then
+        character:setLinearVelocity( 0, LINEAR_VELOCITY )
+    end
+end
+
 -- Move character horizontally
 local function movePlayer (event)
     character.x = character.x + motionx
