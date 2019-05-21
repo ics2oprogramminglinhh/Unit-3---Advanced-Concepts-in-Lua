@@ -16,7 +16,6 @@
 local composer = require( "composer" )
 local widget = require( "widget" )
 local physics = require( "physics")
-local joystick = require( "joystick" )
 
 -----------------------------------------------------------------------------------------
 
@@ -48,7 +47,7 @@ local wrongAnswerText2
 local wrongAnswerText3
 
 local answerPosition = 1
-local bkg_image
+local bkg
 local cover
 
 local X1 = display.contentWidth*2/7
@@ -58,33 +57,6 @@ local Y2 = display.contentHeight*5.5/7
 
 local userAnswer
 local textTouched = false
-
-local muteButton
-local unmuteButton
-
-local joystickPressed = false 
-local facingWhichDirection = "right"
-local backButton
-
-----------------------------------------------------------------------------------------
--- GLOBAL VARIABLES
-----------------------------------------------------------------------------------------
-
-restarted = 0
-userLives = 3
-lvl = 1
-meatNumber = 0
-
--- set the boolean variable to be true
-soundOn = true
-
-----------------------------------------------------------------------------------------
--- SOUNDS 
-----------------------------------------------------------------------------------------
-
-local firstScreen = audio.loadSound("Sounds/level1Screen.mp3")
-local firstScreenChannel
-
 
 -----------------------------------------------------------------------------------------
 --LOCAL FUNCTIONS
@@ -96,88 +68,6 @@ local function BackToLevel1()
   
     ResumeGame()
 end 
-
-local function ScreenLimit( character )   
-
-    -- Checking if the the character is about to go off the right side of the screen
-    if character.x > ( display.contentWidth - character.width / 2 ) then
-            
-        character.x = character.x - 6.5
-
-    -- Checking if the character is about to go off the left side of the screen
-    elseif character.x < ( character.width / 2 ) then
-
-        character.x = character.x + 6.5
-
-    -----------------------------------------------------------------------------------------
-
-    -- Checking if the character is about to go off the bottom of the screen
-    elseif character.y > ( display.contentHeight - character.height / 2 ) then
-
-        character.y = character.y - 6.5
-
-    -- Checking if the character is about to off the top of the screen
-    elseif character.y < ( character.height / 2 ) then
-
-        character.y = character.y + 6.5
-
-    end
-end
-
-local function RuntimeEvents()
-
-        -- Retrieving the properties of the joystick
-        angle = analogStick:getAngle()
-        distance = analogStick:getDistance() -- Distance from the center of the joystick background
-        direction = analogStick.getDirection()
-
-        -----------------------------------------------------------------------------------------
-
-        -- Checking if the joystick is being held
-        if joystickPressed == true then
-
-            -- Applying the force of the joystick to move the lion
-            analogStick:move( lion, 0.75 )
-
-        end
-
-        -----------------------------------------------------------------------------------------
-
-        -- Limiting each character's movement to the edge of the screen
-        ScreenLimit( lion )
-
-        -----------------------------------------------------------------------------------------
-
-        -- Checking if the joystick is pointing the opposite direction of the character
-        if facingWhichDirection == "left" then
-            
-            -- Checking if the joystick is pointing to the right
-            if direction == 1 or direction == 2 or direction == 8 then
-
-                -- Setting the status of the character's directions
-                facingWhichDirection = "right"
-
-            end
-        end
-
-        -----------------------------------------------------------------------------------------
-
-        -- Checking if the joystick is pointing the opposite direction of the character
-        if facingWhichDirection == "right" then
-
-
-            -- Checking if the joystick is pointing to the right
-            if direction == 4 or direction == 5 or direction == 6 then
-
-                -- Setting the status of the character's directions
-                facingWhichDirection = "left"
-
-            end
-        end
-
-        -----------------------------------------------------------------------------------------
-
-end -- local function RuntimeEvents( )
 
 -----------------------------------------------------------------------------------------
 --checking to see if the user pressed the right answer and bring them back to level 1
@@ -223,45 +113,6 @@ local function TouchListenerWrongAnswer3(touch)
         BackToLevel1( )
         
     end 
-end
-
-local function AddPhysicsBodies()
-
-    physics.addBody(wall1, "static", {friction = 0})
-    physics.addBody(wall2, "static", {friction = 0})
-    physics.addBody(wall3, "static", {friction = 0})
-    physics.addBody(wall4, "static", {friction = 0})
-    physics.addBody(wall5, "static", {friction = 0})
-    physics.addBody(wall6, "static", {friction = 0})
-    physics.addBody(wall7, "static", {friction = 0})
-    physics.addBody(wall8, "static", {friction = 0})
-    physics.addBody(wall9, "static", {friction = 0})
-    physics.addBody(meat1, "static", {friction = 0})
-    physics.addBody(meat2, "static", {friction = 0})
-    physics.addBody(meat3, "static", {friction = 0})
-    physics.addBody(meat4, "static", {friction = 0})
-    physics.addBody(lion, "dynamic", {friction = 0})
-    physics.addBody(sun, "static", {friction = 0})
-end
-
-local function RemovePhysicsBodies()
-
-    physics.removeBody(wall1)
-    physics.removeBody(wall2)
-    physics.removeBody(wall3)
-    physics.removeBody(wall4)
-    physics.removeBody(wall5)
-    physics.removeBody(wall6)
-    physics.removeBody(wall7)
-    physics.removeBody(wall8)
-    physics.removeBody(wall9)
-    physics.removeBody(meat1)
-    physics.removeBody(meat2)
-    physics.removeBody(meat3)
-    physics.removeBody(meat4)
-    physics.removeBody(lion)
-    physics.removeBody(sun)
-
 end
 
 --adding the event listeners 
@@ -369,7 +220,7 @@ function scene:create( event )
 
     -----------------------------------------------------------------------------------------
     --covering the other scene with a rectangle so it looks faded and stops touch from going through
-    bkg_image = display.newRect(display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight)
+    bkg = display.newRect(display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight)
     --setting to a semi black colour
     bkg:setFillColor(0,0,0,0.5)
 
@@ -483,8 +334,6 @@ scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
-
-
 
 -----------------------------------------------------------------------------------------
 
