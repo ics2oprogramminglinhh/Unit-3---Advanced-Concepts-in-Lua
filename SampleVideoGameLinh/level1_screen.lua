@@ -159,7 +159,6 @@ end -- local function RuntimeEvents( )
 
 -----------------------------------------------------------------------------------
 local function AddPhysicsBodies()
-<<<<<<< HEAD
 
     physics.addBody(wall1, "static", {friction = 0})
     physics.addBody(wall2, "static", {friction = 0})
@@ -200,7 +199,6 @@ end
 
 -- Creating Joystick function that determines whether or not joystick is pressed
 local function Movement( touch )
-<<<<<<< HEAD
 
     if touch.phase == "began" then
 
@@ -226,8 +224,6 @@ local function onLocalCollisionwithMeat( self, event )
 
         print ("*** end of lion collision with meat")
 
-=======
-
     if touch.phase == "began" then
 
         -- Setting a boolean to true to simulate the holding of a button
@@ -250,12 +246,10 @@ local function onLocalCollisionwithMeat( self, event )
     elseif ( event.phase == "ended" ) then
         --print( self.myName .. ": collision ended with " .. event.other.myName )
         print ("*** end of lion collision with meat")
->>>>>>> parent of 0a5bd5a... Update
+
         composer.gotoScene( "Math", {effect = "flipFadeOutIn", time = 500})
 
     end
-
-=======
 
     physics.addBody(wall1, "static", {friction = 0})
     physics.addBody(wall2, "static", {friction = 0})
@@ -272,26 +266,19 @@ local function onLocalCollisionwithMeat( self, event )
     physics.addBody(meat4, "static", {friction = 0})
     physics.addBody(lion, "dynamic", {friction = 0})
     physics.addBody(sun, "static", {friction = 0})
->>>>>>> parent of 0a5bd5a... Update
+
 end
 
 local function onLocalCollisionWithSun( self, event )
-<<<<<<< HEAD
 
-<<<<<<< HEAD
     if ( event.phase == "began" ) then
         --print( self.myName .. ": collision began with " .. event.other.myName )
         print ("*** lion collision with sun")
-        
-
-=======
 
     if ( event.phase == "began" ) then
         --print( self.myName .. ": collision began with " .. event.other.myName )
         print ("*** lion collision with sun")
         
-
->>>>>>> parent of 0a5bd5a... Update
     elseif ( event.phase == "ended" ) then
         --print( self.myName .. ": collision ended with " .. event.other.myName )
         -- change to lvl2 scene
@@ -299,7 +286,6 @@ local function onLocalCollisionWithSun( self, event )
         composer.gotoScene( "main_menu", {effect = "flipFadeOutIn", time = 500})
         restarted = 1
         
-=======
     physics.removeBody(wall1)
     physics.removeBody(wall2)
     physics.removeBody(wall3)
@@ -345,13 +331,10 @@ local function onLocalCollisionwithMeat( self, event )
         print ("*** end of lion collision with meat")
         composer.gotoScene( "Math", {effect = "flipFadeOutIn", time = 500})
 
->>>>>>> parent of 0a5bd5a... Update
     end
 
 end
 
-<<<<<<< HEAD
-=======
 local function onLocalCollisionWithSun( self, event )
 
     if ( event.phase == "began" ) then
@@ -370,7 +353,6 @@ local function onLocalCollisionWithSun( self, event )
 
 end
 
->>>>>>> parent of 0a5bd5a... Update
 -- Function for mute button
 local function Mute(touch)
     if (touch.phase == "ended") then
@@ -410,7 +392,6 @@ function scene:create( event )
     local sceneGroup = self.view
     meatNumber = 0
     userLives = 3
-<<<<<<< HEAD
 
 -----------------------------------------------------------------------------------------
     -- BUTTON WIDGETS
@@ -423,20 +404,7 @@ function scene:create( event )
         x = 100,
         y = 700,
 
-=======
 
------------------------------------------------------------------------------------------
-    -- BUTTON WIDGETS
------------------------------------------------------------------------------------------
-
-    -- Creating Back Button
-    backButton = widget.newButton( 
-    {
-        -- Setting Position
-        x = 100,
-        y = 700,
-
->>>>>>> parent of 0a5bd5a... Update
         -- Setting Dimensions
         width = 200,
         height = 100,
@@ -444,24 +412,9 @@ function scene:create( event )
         -- Setting Visual Properties
         defaultFile = "Images/Back Button Unpressed.png",
         overFile = "Images/Back Button Pressed.png",
-<<<<<<< HEAD
-<<<<<<< HEAD
 
         -- Setting Functional Properties
         onRelease = BackTransition
-
-=======
-
-        -- Setting Functional Properties
-        onRelease = BackTransition
-
->>>>>>> parent of 0a5bd5a... Update
-=======
-
-        -- Setting Functional Properties
-        onRelease = BackTransition
-
->>>>>>> parent of 0a5bd5a... Update
     } )
 
     -- send backButton to the front
@@ -587,8 +540,6 @@ function scene:create( event )
    meat2.anchorY = 0
    meat2.x = 240
    meat2.y = 10
-<<<<<<< HEAD
-<<<<<<< HEAD
 
    -- scale the lion
    meat2:scale(0.3, 0.3)   
@@ -658,7 +609,65 @@ function scene:create( event )
     meat1.collision = onLocalCollisionwithMeat
     sun.collision = onLocalCollisionWithSun
 
-=======
+   -- scale the lion
+   meat2:scale(0.3, 0.3)   
+
+--------------------------------------------------------------------
+
+-- Creating the third meat
+   meat3 = display.newImageRect("Images/meat.png", 420, 470)
+
+    -- position the meat
+   meat3.anchorX = 0
+   meat3.anchorY = 0
+   meat3.x = 440
+   meat3.y = 600  
+
+   -- scale the lion
+   meat3:scale(0.3, 0.3)
+
+--------------------------------------------------------------------
+
+-- Creating the last meat
+   meat4 = display.newImageRect("Images/meat.png", 420, 470)
+
+   -- position the meat
+   meat4.anchorX = 0
+   meat4.anchorY = 0
+   meat4.x = 640
+   meat4.y = 10
+
+   -- scale the lion
+   meat4:scale(0.3, 0.3)
+
+   -----------------------------------------------------------------
+
+-- Creating the lion character
+    lion = display.newImageRect("Images/lion.png", 80, 80)
+
+    -- positioning the lion 
+    lion.anchorX = 0
+    lion.anchorY = 0 
+    lion.x = 60
+    lion.y = 20
+
+    -- scale the lion (make it larger)
+    lion:scale( 1.5, 1.5 )
+
+------------------------------------------------------------------
+
+-- Creating the sun
+   sun = display.newImageRect("Images/Sun.png", 150, 150)
+
+   -- positioning the sun
+   sun.anchorX = 0
+   sun.anchorY = 0
+   sun.x = 620
+   sun.y = 450   
+
+-----------------------------------------------------------------
+-- COLLISION EVENT LISTENERS
+----------------------------------------------------------------
 
    -- scale the lion
    meat2:scale(0.3, 0.3)   
@@ -720,69 +729,6 @@ function scene:create( event )
 -- COLLISION EVENT LISTENERS
 ----------------------------------------------------------------
 
-=======
-
-   -- scale the lion
-   meat2:scale(0.3, 0.3)   
-
---------------------------------------------------------------------
-
--- Creating the third meat
-   meat3 = display.newImageRect("Images/meat.png", 420, 470)
-
-    -- position the meat
-   meat3.anchorX = 0
-   meat3.anchorY = 0
-   meat3.x = 440
-   meat3.y = 600  
-
-   -- scale the lion
-   meat3:scale(0.3, 0.3)
-
---------------------------------------------------------------------
-
--- Creating the last meat
-   meat4 = display.newImageRect("Images/meat.png", 420, 470)
-
-   -- position the meat
-   meat4.anchorX = 0
-   meat4.anchorY = 0
-   meat4.x = 640
-   meat4.y = 10
-
-   -- scale the lion
-   meat4:scale(0.3, 0.3)
-
-   -----------------------------------------------------------------
-
--- Creating the lion character
-    lion = display.newImageRect("Images/lion.png", 80, 80)
-
-    -- positioning the lion 
-    lion.anchorX = 0
-    lion.anchorY = 0 
-    lion.x = 60
-    lion.y = 20
-
-    -- scale the lion (make it larger)
-    lion:scale( 1.5, 1.5 )
-
-------------------------------------------------------------------
-
--- Creating the sun
-   sun = display.newImageRect("Images/Sun.png", 150, 150)
-
-   -- positioning the sun
-   sun.anchorX = 0
-   sun.anchorY = 0
-   sun.x = 620
-   sun.y = 450   
-
------------------------------------------------------------------
--- COLLISION EVENT LISTENERS
-----------------------------------------------------------------
-
->>>>>>> parent of 0a5bd5a... Update
     -- Add collision event listeners
     lion.collision = onLocalCollisionwithMeat
     meat2.collision = onLocalCollisionwithMeat
@@ -791,10 +737,6 @@ function scene:create( event )
     meat1.collision = onLocalCollisionwithMeat
     sun.collision = onLocalCollisionWithSun
 
-<<<<<<< HEAD
->>>>>>> parent of 0a5bd5a... Update
-=======
->>>>>>> parent of 0a5bd5a... Update
     -- Add Event Listeners
         lion:addEventListener( "collision", lion)
         meat2:addEventListener( "collision", meat2 )
@@ -813,8 +755,6 @@ function scene:create( event )
 
     -- Insert background image into the scene group in order to ONLY be associated with this scene
     sceneGroup:insert( bkg_image )  
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     -- Send the background image to the back layer so all other objects can be on top
     bkg_image:toBack()
@@ -827,7 +767,16 @@ muteButton.x = 960
 muteButton.y = 55
 muteButton.isVisible = true
 
-=======
+    -- Send the background image to the back layer so all other objects can be on top
+    bkg_image:toBack()
+
+-------------------------------------------------------------------
+
+-- creating mute button
+muteButton = display.newImageRect("Images/Mute Button Unpressed.png", 100, 100)
+muteButton.x = 960
+muteButton.y = 55
+muteButton.isVisible = true
 
     -- Send the background image to the back layer so all other objects can be on top
     bkg_image:toBack()
@@ -840,21 +789,6 @@ muteButton.x = 960
 muteButton.y = 55
 muteButton.isVisible = true
 
->>>>>>> parent of 0a5bd5a... Update
-=======
-
-    -- Send the background image to the back layer so all other objects can be on top
-    bkg_image:toBack()
-
--------------------------------------------------------------------
-
--- creating mute button
-muteButton = display.newImageRect("Images/Mute Button Unpressed.png", 100, 100)
-muteButton.x = 960
-muteButton.y = 55
-muteButton.isVisible = true
-
->>>>>>> parent of 0a5bd5a... Update
 -- creating unmute button
 unmuteButton = display.newImageRect("Images/Mute Button Pressed.png", 100, 100)
 unmuteButton.x = 960
@@ -943,24 +877,6 @@ function scene:show( event )
             meat2.y = -250
             meat2.collision = offLocalCollision
             meat2:removeEventListener( "collision", meat2 )
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> parent of 0a5bd5a... Update
-
-        end
-
-        if (meatNumber == 3) then
-            -- set the x and y position
-            meat3.x = -250
-            meat3.y = -250
-            meat3.collision = offLocalCollision
-            meat3:removeEventListener( "collision", meat3 )
-
-        end
-<<<<<<< HEAD
-
-=======
 
         end
 
@@ -973,10 +889,6 @@ function scene:show( event )
 
         end
 
->>>>>>> parent of 0a5bd5a... Update
-=======
-
->>>>>>> parent of 0a5bd5a... Update
         if (meatNumber == 4) then
             -- set the x and y position
             meat4.x = -250
