@@ -221,7 +221,9 @@ local function onLocalCollisionwithMeat( self, event )
         
     elseif ( event.phase == "ended" ) then
         --print( self.myName .. ": collision ended with " .. event.other.myName )
-        print ("*** end of lion collision with meat1")
+
+        print ("*** end of lion collision with meat")
+
         composer.gotoScene( "Math", {effect = "flipFadeOutIn", time = 500})
 
     end
