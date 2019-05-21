@@ -465,23 +465,6 @@ local function RemovePhysicsBodies()
 
 end --local function Movement( touch )
 
-local function onLocalCollisionwithMeat( self, event )
-
-    if ( event.phase == "began" ) then
-        --print( self.myName .. ": collision began with " .. event.other.myName )
-        print ("*** lion collision with meat1")
-        
-    elseif ( event.phase == "ended" ) then
-        --print( self.myName .. ": collision ended with " .. event.other.myName )
-        print ("*** end of lion collision with meat1")
-        composer.gotoScene( "Math", {effect = "flipFadeOutIn", time = 500})
-
-    physics.removeBody(leftW)
-    physics.removeBody(topW)
-    physics.removeBody(floor)
-
-end
-
 -----------------------------------------------------------------------------------------
 
 local function Mute(touch)
