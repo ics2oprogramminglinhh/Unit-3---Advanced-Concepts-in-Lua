@@ -52,21 +52,21 @@ function Joystick.new( innerRadius, outerRadius )
 
     -- Creating a function which can be called to get the direction value
     function joyGroup.getDirection()
-        return directionId
+    	return directionId
     end
 
     -----------------------------------------------------------------------------------------
 
     -- Creating a function which can be called to get the anlge in degrees
     function joyGroup:getAngle()
-        return angle
+    	return angle
     end
 
     -----------------------------------------------------------------------------------------
 
     -- Creating a function which can be called to get the value of the distance from the center of the joystick
     function joyGroup:getDistance()
-        return distance/stopRadius
+    	return distance/stopRadius
     end
     
     -----------------------------------------------------------------------------------------
@@ -153,7 +153,7 @@ function Joystick.new( innerRadius, outerRadius )
 
         if( (phase=='began') or (phase=="moved") ) then
 
-            if( phase == 'began' ) then
+        	if( phase == 'began' ) then
                 stage:setFocus(event.target, event.id)
             end
 
@@ -169,12 +169,12 @@ function Joystick.new( innerRadius, outerRadius )
             -----------------------------------------------------------------------------------------
 
             if( angle < 0 ) then
-                angle = 360 + angle
+            	angle = 360 + angle
             end
 
             -----------------------------------------------------------------------------------------
 
-            -- Creating different axis
+			-- Creating different axis
             if( (angle>=22.5) and (angle<67.5) ) then
                 directionId = 2
             elseif( (angle>=67.5) and (angle<112.5) ) then
@@ -192,11 +192,11 @@ function Joystick.new( innerRadius, outerRadius )
             else
                 directionId = 1
             end
-            
+			
             -----------------------------------------------------------------------------------------
 
-            -- could emit "direction" events here
-            --Runtime:dispatchEvent( {name='direction',directionId=directionId } )
+			-- could emit "direction" events here
+			--Runtime:dispatchEvent( {name='direction',directionId=directionId } )
             
             -----------------------------------------------------------------------------------------
 
@@ -266,11 +266,11 @@ return Joystick
 --js.y = display.contentHeight/2
 --
 --function catchTimer( e )
---  print( "  joystick info: "
---      .. " dir=" .. js:getDirection()
---      .. " angle=" .. js:getAngle()
---      .. " dist="..js:getDistance() )
---  return true
+--	print( "  joystick info: "
+--		.. " dir=" .. js:getDirection()
+--		.. " angle=" .. js:getAngle()
+--		.. " dist="..js:getDistance() )
+--	return true
 --end
 --
 --js:activate()

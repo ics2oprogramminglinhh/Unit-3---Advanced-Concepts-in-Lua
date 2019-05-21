@@ -369,11 +369,7 @@ function scene:create( event )
 
     -----------------------------------------------------------------------------------------
     --covering the other scene with a rectangle so it looks faded and stops touch from going through
-
     bkg_image = display.newRect(display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight)
-
-    bkg = display.newRect(display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight)
-
     --setting to a semi black colour
     bkg:setFillColor(0,0,0,0.5)
 
@@ -487,6 +483,8 @@ scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
+
+
 
 -----------------------------------------------------------------------------------------
 
