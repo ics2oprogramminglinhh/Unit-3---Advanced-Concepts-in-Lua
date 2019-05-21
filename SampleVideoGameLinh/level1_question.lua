@@ -58,6 +58,8 @@ local Y2 = display.contentHeight*5.5/7
 local userAnswer
 local textTouched = false
 
+numLives = 3
+
 -----------------------------------------------------------------------------------------
 --LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -84,35 +86,81 @@ end
 --checking to see if the user pressed the right answer and bring them back to level 1
 local function TouchListenerWrongAnswer(touch)
     userAnswer = wrongText1.text
-    
-    if (touch.phase == "ended") then
-        
-        BackToLevel1( )
-        
-        
-    end 
+    numLives = numLives - 1
+
+    if (numLives == 3) then
+        heart1.isVisible = true
+        heart2.isVisible = true
+        heart3.isVisible = true
+    elseif (numLives == 2) then
+        heart1.isVisible = false
+        heart2.isVisible = true
+        heart3.isVisible = true
+    elseif (numLives == 1) then
+        heart1.isVisible = false
+        heart2.isVisible = false
+        heart3.isVisible = true
+    elseif (numLives == 0) then
+        heart1.isVisible = false
+        heart2.isVisible = false
+        heart3.isVisible = false
+    end
+
+    BackToLevel1()
+
 end
 
 --checking to see if the user pressed the right answer and bring them back to level 1
 local function TouchListenerWrongAnswer2(touch)
     userAnswer = wrongText2.text
-    
-    if (touch.phase == "ended") then
+    numLives = numLives - 1
 
-        BackToLevel1( )
-        
-    end 
+    if (numLives == 3) then
+        heart1.isVisible = true
+        heart2.isVisible = true
+        heart3.isVisible = true
+    elseif (numLives == 2) then
+        heart1.isVisible = false
+        heart2.isVisible = true
+        heart3.isVisible = true
+    elseif (numLives == 1) then
+        heart1.isVisible = false
+        heart2.isVisible = false
+        heart3.isVisible = true
+    elseif (numLives == 0) then
+        heart1.isVisible = false
+        heart2.isVisible = false
+        heart3.isVisible = false
+    end
+
+    BackToLevel1()
 end
 
 --checking to see if the user pressed the right answer and bring them back to level 1
 local function TouchListenerWrongAnswer3(touch)
     userAnswer = wrongText3.text
-    
-    if (touch.phase == "ended") then
+    numLives = numLives - 1
 
-        BackToLevel1( )
-        
-    end 
+    if (numLives == 3) then
+        heart1.isVisible = true
+        heart2.isVisible = true
+        heart3.isVisible = true
+    elseif (numLives == 2) then
+        heart1.isVisible = false
+        heart2.isVisible = true
+        heart3.isVisible = true
+    elseif (numLives == 1) then
+        heart1.isVisible = false
+        heart2.isVisible = false
+        heart3.isVisible = true
+    elseif (numLives == 0) then
+        heart1.isVisible = false
+        heart2.isVisible = false
+        heart3.isVisible = false
+    end
+
+    BackToLevel1()
+
 end
 
 --adding the event listeners 

@@ -61,14 +61,6 @@ local wall12
 local wall13
 local wall14
 
-local spikes1
-local spikes2
-local spikes3
-
-local spikes1platform
-local spikes2platform
-local spikes3platform
-
 local torchesAndSign
 local door
 local character
@@ -114,6 +106,7 @@ local mainMenuChannel
 -- set the boolean variable to be true
 soundOn = true
 
+lives = 3
 -----------------------------------------------------------------------------------------
 -- LOCAL SCENE FUNCTIONS
 ----------------------------------------------------------------------------------------- 
@@ -296,90 +289,38 @@ local function onCollision( self, event )
     --print( event.otherElement )  --the element (number) of the second object which was hit in the collision
     --print( event.target.myName .. ": collision began with " .. event.other.myName )
 
-    if ( event.phase == "began" ) then
 
-        --Pop sound
-        popSoundChannel = audio.play(popSound)
-
-        if  (event.target.myName == "spikes1") or 
-            (event.target.myName == "spikes2") or
-            (event.target.myName == "spikes3") then
-
-            -- remove runtime listeners that move the character
-
-            RemoveRuntimeListeners()
-
-            -- remove the character from the display
-            display.remove(character)
-
-            -- decrease number of lives
-            numLives = numLives - 1
-
-           if (numLives == 2) then
-                -- update hearts
-                heart3.isVisible = false
-                heart2.isVisible = true
-                heart1.isVisible = true
-                timer.performWithDelay(200, ReplaceCharacter) 
-
-            elseif (numLives == 1) then
-                -- update hearts
-                heart3.isVisible = false
-                heart2.isVisible = false
-                heart1.isVisible = true 
-                timer.performWithDelay(200, ReplaceCharacter)
-
-            elseif (numLives == 0) then
-                -- update hearts
-                heart3.isVisible = false
-                heart2.isVisible = false
-                heart1.isVisible = false 
-                timer.performWithDelay(200, YouLoseTransition)
-
-            end
-        
-        end
-
-        if  (event.target.myName == "meat1") or
+    if  (event.target.myName == "meat1") or
             (event.target.myName == "meat2") or
             (event.target.myName == "meat3") then
 
-            -- get the meat that the user hit
-            theMeat = event.target
+        -- get the meat that the user hit
+        theMeat = event.target
 
-            -- stop the character from moving
-            motionx = 0
+        -- stop the character from moving
+        motionx = 0
 
-            -- make the character invisible
-            character.isVisible = false
+        -- make the character invisible
+        character.isVisible = false
 
-            -- show overlay with math question
-            composer.showOverlay( "level1_question", { isModal = true, effect = "fade", time = 100})
+        -- show overlay with math question
+        composer.showOverlay( "level1_question", { isModal = true, effect = "fade", time = 100})
 
-            -- Increment questions answered
-            questionsAnswered = questionsAnswered + 1
+        -- Increment questions answered
+        questionsAnswered = questionsAnswered + 1
         end
 
-        if (event.target.myName == "door") then
-            --check to see if the user has answered 5 questions
-            if (questionsAnswered == 3) then
-                -- after getting 3 questions right, go to the you win screen
-                composer.gotoScene("you_win")
-            end
-        end        
-
-    end
+    if (event.target.myName == "door") then
+        --check to see if the user has answered 5 questions
+        if (questionsAnswered == 3) then
+            -- after getting 3 questions right, go to the you win screen
+            composer.gotoScene("you_win")
+        end
+    end       
 end
 
 
 local function AddCollisionListeners()
-    -- if character collides with spikes, onCollision will be called
-    spikes1.collision = onCollision
-    spikes1:addEventListener( "collision" )
-    spikes2.collision = onCollision
-    spikes2:addEventListener( "collision" )
-    spikes3.collision = onCollision
-    spikes3:addEventListener( "collision" )
 
     -- if character collides with meat, onCollision will be called    
     meat1.collision = onCollision
@@ -394,10 +335,6 @@ local function AddCollisionListeners()
 end
 
 local function RemoveCollisionListeners()
-    spikes1:removeEventListener( "collision" )
-    spikes2:removeEventListener( "collision" )
-    spikes3:removeEventListener( "collision" )
-
     meat1:removeEventListener( "collision" )
     meat2:removeEventListener( "collision" )
     meat3:removeEventListener( "collision" )
@@ -423,14 +360,6 @@ local function AddPhysicsBodies()
     physics.addBody(wall12, "static", {friction = 0})
     physics.addBody(wall13, "static", {friction = 0})
     physics.addBody(wall14, "static", {friction = 0})
-
-    physics.addBody( spikes1, "static", { density=1.0, friction=0.3, bounce=0.2 } )
-    physics.addBody( spikes2, "static", { density=1.0, friction=0.3, bounce=0.2 } )
-    physics.addBody( spikes3, "static", { density=1.0, friction=0.3, bounce=0.2 } )    
-
-    physics.addBody( spikes1platform, "static", {friction = 0})
-    physics.addBody( spikes2platform, "static", {friction = 0})
-    physics.addBody( spikes3platform, "static", {friction = 0})
 
     physics.addBody(leftW, "static", {friction = 0})
     physics.addBody(topW, "static", {friction = 0})
@@ -460,14 +389,6 @@ local function RemovePhysicsBodies()
     physics.removeBody(wall12)
     physics.removeBody(wall13)
     physics.removeBody(wall14)
-
-    physics.removeBody(spikes1)
-    physics.removeBody(spikes2)
-    physics.removeBody(spikes3)
-
-    physics.removeBody(spikes1platform)
-    physics.removeBody(spikes2platform)
-    physics.removeBody(spikes3platform)
 
     physics.removeBody(leftW)
     physics.removeBody(topW)
@@ -660,45 +581,6 @@ function scene:create( event )
     sceneGroup:insert( wall13 )
     sceneGroup:insert( wall14 )
 
-    spikes1 = display.newImageRect("Images/Level-1Spikes1.png", 250, 50)
-    spikes1.x = display.contentWidth * 3 / 8
-    spikes1.y = display.contentHeight * 2.5 / 5
-    spikes1.myName = "spikes1"
-        
-    sceneGroup:insert( spikes1)
-
-    spikes1platform = display.newImageRect("Images/Level-1Platform1.png", 250, 50)
-    spikes1platform.x = display.contentWidth * 3 / 8
-    spikes1platform.y = display.contentHeight * 2.8 / 5
-        
-    sceneGroup:insert( spikes1platform)
-
-    spikes2 = display.newImageRect("Images/Level-1Spikes2.png", 150, 50)
-    spikes2.x = display.contentWidth * 6 / 8
-    spikes2.y = display.contentHeight * 2.5 / 5
-    spikes2.myName = "spikes2"
-        
-    sceneGroup:insert( spikes2)
-
-    spikes2platform = display.newImageRect("Images/Level-1Platform1.png", 150, 50)
-    spikes2platform.x = display.contentWidth * 6 / 8
-    spikes2platform.y = display.contentHeight * 2.2 / 5
-        
-    sceneGroup:insert( spikes2platform)
-
-    spikes3 = display.newImageRect("Images/Level-1Spikes3.png", 50, 150)
-    spikes3.x = 940
-    spikes3.y = 720
-    spikes3.myName = "spikes3"
-        
-    sceneGroup:insert( spikes3)
-
-    spikes3platform = display.newImageRect("Images/Level-1Platform2.png", 50, 150)
-    spikes3platform.x = 990
-    spikes3platform.y = 720
-        
-    sceneGroup:insert( spikes3platform)
-
     -- Insert the torchesAndSign Objects
     torchesAndSign = display.newImageRect("Images/Level-1Random.png", display.contentWidth, display.contentHeight)
     torchesAndSign.x = display.contentCenterX
@@ -711,7 +593,6 @@ function scene:create( event )
     door = display.newImage("Images/Level-1Door.png", 200, 200)
     door.x = 530
     door.y = 222
-    door:scale(0.5, 0.5)
     door.myName = "door"
 
     -- Insert objects into the scene group in order to ONLY be associated with this scene
