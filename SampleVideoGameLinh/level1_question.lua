@@ -88,24 +88,6 @@ local function TouchListenerWrongAnswer(touch)
     userAnswer = wrongText1.text
     numLives = numLives - 1
 
-    if (numLives == 3) then
-        heart1.isVisible = true
-        heart2.isVisible = true
-        heart3.isVisible = true
-    elseif (numLives == 2) then
-        heart1.isVisible = false
-        heart2.isVisible = true
-        heart3.isVisible = true
-    elseif (numLives == 1) then
-        heart1.isVisible = false
-        heart2.isVisible = false
-        heart3.isVisible = true
-    elseif (numLives == 0) then
-        heart1.isVisible = false
-        heart2.isVisible = false
-        heart3.isVisible = false
-    end
-
     BackToLevel1()
 
 end
@@ -115,24 +97,6 @@ local function TouchListenerWrongAnswer2(touch)
     userAnswer = wrongText2.text
     numLives = numLives - 1
 
-    if (numLives == 3) then
-        heart1.isVisible = true
-        heart2.isVisible = true
-        heart3.isVisible = true
-    elseif (numLives == 2) then
-        heart1.isVisible = false
-        heart2.isVisible = true
-        heart3.isVisible = true
-    elseif (numLives == 1) then
-        heart1.isVisible = false
-        heart2.isVisible = false
-        heart3.isVisible = true
-    elseif (numLives == 0) then
-        heart1.isVisible = false
-        heart2.isVisible = false
-        heart3.isVisible = false
-    end
-
     BackToLevel1()
 end
 
@@ -140,24 +104,6 @@ end
 local function TouchListenerWrongAnswer3(touch)
     userAnswer = wrongText3.text
     numLives = numLives - 1
-
-    if (numLives == 3) then
-        heart1.isVisible = true
-        heart2.isVisible = true
-        heart3.isVisible = true
-    elseif (numLives == 2) then
-        heart1.isVisible = false
-        heart2.isVisible = true
-        heart3.isVisible = true
-    elseif (numLives == 1) then
-        heart1.isVisible = false
-        heart2.isVisible = false
-        heart3.isVisible = true
-    elseif (numLives == 0) then
-        heart1.isVisible = false
-        heart2.isVisible = false
-        heart3.isVisible = false
-    end
 
     BackToLevel1()
 

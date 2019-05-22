@@ -91,6 +91,12 @@ local questionsAnswered = 0
 local muteButton
 local unmuteButton
 
+-- Variables for the timer
+local totalSeconds = 31
+local secondsLeft = 30
+local clockText
+local countDownTimer
+
 ------------------------------------------------------------------------------------------
 -- SOUNDS
 ------------------------------------------------------------------------------------------
@@ -105,8 +111,6 @@ local mainMenuChannel
 
 -- set the boolean variable to be true
 soundOn = true
-
-lives = 3
 -----------------------------------------------------------------------------------------
 -- LOCAL SCENE FUNCTIONS
 ----------------------------------------------------------------------------------------- 
@@ -426,6 +430,39 @@ local function Unmute(touch)
     end
 end
 
+local function UpdateTime()
+
+    -- decrement the number of seconds
+    secondsLeft = secondsLeft - 1
+
+    -- display the number of seconds left in the clock object
+    clockText.text = secondsLeft .. ""
+
+    if (secondsLeft == 0) then
+        -- reset the number of seconds left
+        secondsLeft = totalSeconds 
+        lives = lives - 1
+        AskQuestion()
+
+        if (lives == 3) then
+            heart1.isVisible = false
+        elseif (lives == 2) then
+            heart2.isVisible = false
+        elseif (lives == 1) then
+            clockText.isVisible = false
+            YouLoseTransition()
+            
+            -- clear text field
+            event.target.text = ""
+        end
+    end
+end
+
+-- function that calls the timer
+local function StartTimer()
+    -- create a countdown timer that loops infinitely
+    countDownTimer = timer.performWithDelay(1500, UpdateTime, 0)
+end
 -----------------------------------------------------------------------------------------
 -- GLOBAL FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -692,6 +729,12 @@ function scene:create( event )
 
     sceneGroup:insert( muteButton )
     sceneGroup:insert( unmuteButton )
+
+    -- display the timer
+    clockText = display.newText("", 100, 100, Arial, 50)
+    clockText:setTextColor(204/255, 0/255, 0/255)
+
+    sceneGroup:insert(clockText)
 
 end --function scene:create( event )
 
